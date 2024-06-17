@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.mobdeve.s11.group5.shopfreemobileapp-mergeDebugResources-47:/values-watch-v21/values-watch-v21.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\josh\\.gradle\\caches\\transforms-4\\e8671fdcdc69cb6061c6c8fe40d24623\\transformed\\appcompat-1.2.0\\res\\values-watch-v21\\values-watch-v21.xml",
+                    "from": {
+                        "startLines": "2,6,10",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,271,499",
+                        "endLines": "5,9,13",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "266,494,724"
+                    }
+                }
+            ]
+        }
+    ]
+}
