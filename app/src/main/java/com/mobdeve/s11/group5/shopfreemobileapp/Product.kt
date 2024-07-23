@@ -6,7 +6,7 @@ data class Product (
     public var pId: Long,
     public var pName: String,
     public var pLocId: Long,
-    public var pLocPrice: Double,
+    public var pPrice: Double,
     public var imageUri: Uri,
     public var pQuantity: Int?,
     public var pDesc: String

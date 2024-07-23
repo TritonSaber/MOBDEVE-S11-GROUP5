@@ -4,9 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
-import com.mobdeve.s11.group5.shopfreemobileapp.databinding.SignupBinding
 import com.mobdeve.s11.group5.shopfreemobileapp.databinding.TitlePageBinding
+import com.squareup.picasso.Picasso
 
 class MainActivity : ComponentActivity() {
     //Requisites
@@ -16,5 +15,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.dev_access)
+
+        Picasso.get().load(R.drawable.sanmiglight)
     }
 }

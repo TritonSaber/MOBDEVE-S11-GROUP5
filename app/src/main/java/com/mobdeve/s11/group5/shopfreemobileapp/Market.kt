@@ -4,4 +4,5 @@ data class Market (
     public var mId: Long,
     public var mName: String,
     public var mLoc: String,
+    public var mDesc: String,
 )

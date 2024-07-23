@@ -64,7 +64,7 @@ class CartViewHolder (private val itemBinding: CartItemBinding): RecyclerView.Vi
         Picasso.get().load(p.imageUri).into(this.ciImage)
         ciDesc.setText(p.pDesc)
         //this will probably be 0
-        ciTotal.setText((p.pQuantity!!.toInt() * p.pLocPrice).toString())
+        ciTotal.setText((p.pQuantity!!.toInt() * p.pPrice).toString())
     }
 
 
