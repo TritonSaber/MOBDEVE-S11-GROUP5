@@ -8,5 +8,6 @@ data class Product (
     public var pLocId: Long,
     public var pLocPrice: Double,
     public var imageUri: Uri,
-    public var pQuantity: Int?
+    public var pQuantity: Int?,
+    public var pDesc: String
 )
