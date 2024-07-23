@@ -1,10 +1,13 @@
 package com.mobdeve.s11.group5.shopfreemobileapp
 
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import com.mobdeve.s11.group5.shopfreemobileapp.databinding.CartItemBinding
 
 class CartAdapter (cart: ArrayList<Product>, nextActivityResultLauncher: ActivityResultLauncher<Intent>): RecyclerView.Adapter<CartViewHolder>() {
@@ -15,7 +18,6 @@ class CartAdapter (cart: ArrayList<Product>, nextActivityResultLauncher: Activit
     /*
         Things that we need this to do:
             - on Click of X we remove te item from cart
-            - modification of the quantity of an item
             - clicking confirm payment goes to the Payment activity
      */
 
@@ -25,12 +27,25 @@ class CartAdapter (cart: ArrayList<Product>, nextActivityResultLauncher: Activit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
         val itemBinding = CartItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CartViewHolder(itemBinding)
+        val cartViewHolder = CartViewHolder(itemBinding)
+
+        //delete logic
+        val db = Firebase.firestore
+
+        itemBinding.ciClose.setOnClickListener {view ->
+            //remove it in the online database first
+
+            //remove the item at the position
+            (view.context as Activity).runOnUiThread {
+                cart.removeAt(cartViewHolder.bindingAdapterPosition)
+                notifyItemRemoved(cartViewHolder.bindingAdapterPosition)
+            }
+        }
+
+        return cartViewHolder
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         holder.bindData(this.cart[position])
     }
-
-    //add logic for the removal of items
 }

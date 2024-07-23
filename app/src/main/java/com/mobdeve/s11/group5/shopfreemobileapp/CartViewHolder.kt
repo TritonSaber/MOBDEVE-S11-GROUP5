@@ -3,6 +3,7 @@ package com.mobdeve.s11.group5.shopfreemobileapp
 import android.annotation.SuppressLint
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ class CartViewHolder (private val itemBinding: CartItemBinding): RecyclerView.Vi
     private lateinit var ciAddBtn: Button
     private lateinit var ciQuantity: EditText
     private lateinit var ciTotal: TextView
+    private lateinit var ciClose: ImageButton
 
     init {
         this@CartViewHolder.ciAddBtn.setOnClickListener {
@@ -56,6 +58,7 @@ class CartViewHolder (private val itemBinding: CartItemBinding): RecyclerView.Vi
         this.ciAddBtn = itemBinding.ciAddBtn
         this.ciQuantity = itemBinding.ciQuantity
         this.ciTotal = itemBinding.ciTotal
+        this.ciClose = itemBinding.ciClose
     }
 
     //using the Product class to put in the data needed
