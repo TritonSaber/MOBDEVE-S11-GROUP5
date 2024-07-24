@@ -7,5 +7,7 @@ data class Product (
     public var pPrice: Double,
     public var imageUri: Int,
     public var pQuantity: Int?,
-    public var pDesc: String
+    public var pDesc: String,
+    public var pCategory: String,
+    public var pPerWeight: String?
 )

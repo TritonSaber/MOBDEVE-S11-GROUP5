@@ -26,5 +26,13 @@ class MainActivity : ComponentActivity() {
             )
             startActivity(intent)
         }
+
+        view.daProduct.setOnClickListener {
+            Log.d("[DEV]", "Going to Categorical Product page")
+            val intent = Intent(this@MainActivity,ProductActivity::class.java)
+            startActivity(intent)
+        }
+
+
     }
 }

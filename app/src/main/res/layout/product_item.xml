@@ -8,7 +8,8 @@
     <LinearLayout
         android:layout_width="414dp"
         android:layout_height="150dp"
-        android:background="#4CAF50"
+        android:background="@drawable/rounded_edge"
+        android:backgroundTint="#4CAF50"
         android:gravity="center_horizontal|center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,10 +18,10 @@
 
         <ImageView
             android:id="@+id/piImage"
-            tools:src="@tools:sample/avatars"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            tools:src="@tools:sample/avatars" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -38,7 +39,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/piLoc"
+                android:id="@+id/piDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
