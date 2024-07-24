@@ -1,6 +1,6 @@
 package com.mobdeve.s11.group5.shopfreemobileapp
 
-import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -12,45 +12,18 @@ import com.squareup.picasso.Picasso
 
 class CartViewHolder (private val itemBinding: CartItemBinding): RecyclerView.ViewHolder(itemBinding.root) {
     //data that will be binded to each line
-    private lateinit var ciImage: ImageView
-    private lateinit var ciName: TextView
-    private lateinit var ciDesc: TextView
+    private var ciImage: ImageView = itemBinding.ciImage
+    private var ciName: TextView = itemBinding.ciName
+    private var ciDesc: TextView = itemBinding.ciDesc
     //it's currently a Button but ImageButtons exist, will change later
-    private lateinit var ciRemoveBtn: Button
-    private lateinit var ciAddBtn: Button
-    private lateinit var ciQuantity: EditText
-    private lateinit var ciTotal: TextView
-    private lateinit var ciClose: ImageButton
+    private var ciRemoveBtn: Button = itemBinding.ciRemoveBtn
+    private var ciAddBtn: Button = itemBinding.ciAddBtn
+    private var ciQuantity: EditText = itemBinding.ciQuantity
+    private var ciTotal: TextView = itemBinding.ciTotal
+    private var ciClose: ImageButton = itemBinding.ciClose
 
-    init {
-        this@CartViewHolder.ciAddBtn.setOnClickListener {
-            //check if numerical
-            var viable = this.ciQuantity.text.toString().toIntOrNull()
-
-            if (viable != null) {
-                //an int
-                var subtracted = this.ciQuantity.text.toString().toInt() - 1
-                this.ciQuantity.setText(subtracted.toString())
-            } else {
-                this.ciQuantity.setText("0")
-            }
-        }
-
-        this@CartViewHolder.ciRemoveBtn.setOnClickListener {
-            var viable = this.ciQuantity.text.toString().toIntOrNull()
-
-            if (viable != null) {
-                //an int
-                var added = this.ciQuantity.text.toString().toInt() + 1
-                this.ciQuantity.setText(added.toString())
-            } else {
-                this.ciQuantity.setText("0")
-            }
-        }
-    }
-
-    @SuppressLint("NotConstructor")
-    fun CartViewHolder(itemBinding: CartItemBinding){
+    /*
+    public fun CartViewHolder(itemBinding: CartItemBinding){
         this.ciImage = itemBinding.ciImage
         this.ciName = itemBinding.ciName
         this.ciDesc = itemBinding.ciDesc
@@ -59,15 +32,16 @@ class CartViewHolder (private val itemBinding: CartItemBinding): RecyclerView.Vi
         this.ciQuantity = itemBinding.ciQuantity
         this.ciTotal = itemBinding.ciTotal
         this.ciClose = itemBinding.ciClose
-    }
+    }*/
 
     //using the Product class to put in the data needed
     fun bindData(p: Product) {
-        ciName.setText(p.pName)
+        Log.d("[CART]", "Binding this piece of data: $p")
+        ciName.text = p.pName
         Picasso.get().load(p.imageUri).into(this.ciImage)
-        ciDesc.setText(p.pDesc)
+        ciDesc.text = p.pDesc
         //this will probably be 0
-        ciTotal.setText((p.pQuantity!!.toInt() * p.pPrice).toString())
+        ciTotal.text = ((p.pQuantity!!.toInt() * p.pPrice).toString())
     }
 
 

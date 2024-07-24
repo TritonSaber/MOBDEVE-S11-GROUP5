@@ -6,12 +6,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
 import com.mobdeve.s11.group5.shopfreemobileapp.databinding.CartItemBinding
 
 class CartAdapter (cart: ArrayList<Product>, nextActivityResultLauncher: ActivityResultLauncher<Intent>): RecyclerView.Adapter<CartViewHolder>() {
     private val cart: ArrayList<Product> = cart
+
 
     private val nextActivityResultLauncher: ActivityResultLauncher<Intent> = nextActivityResultLauncher
 
@@ -30,7 +29,8 @@ class CartAdapter (cart: ArrayList<Product>, nextActivityResultLauncher: Activit
         val cartViewHolder = CartViewHolder(itemBinding)
 
         //delete logic
-        val db = Firebase.firestore
+        //val db = Firebase.firestore
+
 
         itemBinding.ciClose.setOnClickListener {view ->
             //remove it in the online database first
@@ -39,6 +39,32 @@ class CartAdapter (cart: ArrayList<Product>, nextActivityResultLauncher: Activit
             (view.context as Activity).runOnUiThread {
                 cart.removeAt(cartViewHolder.bindingAdapterPosition)
                 notifyItemRemoved(cartViewHolder.bindingAdapterPosition)
+            }
+        }
+
+        itemBinding.ciAddBtn.setOnClickListener {
+            var viable = itemBinding.ciQuantity.text.toString().toIntOrNull()
+
+            if (viable != null) {
+                //an int
+                var added = itemBinding.ciQuantity.text.toString().toInt() + 1
+                itemBinding.ciQuantity.setText(added.toString())
+            } else {
+                itemBinding.ciQuantity.setText("0")
+            }
+        }
+
+
+        itemBinding.ciRemoveBtn.setOnClickListener {
+            //check if numerical
+            var viable = itemBinding.ciQuantity.text.toString().toIntOrNull()
+
+            if (viable != null) {
+                //an int
+                var subtracted = itemBinding.ciQuantity.text.toString().toInt() - 1
+                itemBinding.ciQuantity.setText(subtracted.toString())
+            } else {
+                itemBinding.ciQuantity.setText("0")
             }
         }
 
