@@ -3,21 +3,15 @@ package com.mobdeve.s11.group5.shopfreemobileapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.mobdeve.s11.group5.shopfreemobileapp.databinding.SignupBinding
-import com.mobdeve.s11.group5.shopfreemobileapp.databinding.TitlePageBinding
-import com.squareup.picasso.Picasso
-import com.mobdeve.s11.group5.shopfreemobileapp.databinding.DevAccessBinding
 import com.mobdeve.s11.group5.shopfreemobileapp.databinding.HomepageBinding
+import com.mobdeve.s11.group5.shopfreemobileapp.databinding.TitlePageBinding
 
 
 class MainActivity : ComponentActivity() {
@@ -27,34 +21,34 @@ class MainActivity : ComponentActivity() {
     private lateinit var homepageBinding: HomepageBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var auth: FirebaseAuth
-    private var currentView: String = ""
+    private var currentView: String = "title"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         this.titleBinding = TitlePageBinding.inflate(layoutInflater)
-        setContentView(R.layout.title_page)
+        setContentView(titleBinding.root)
 
         auth = Firebase.auth
 
-//        Picasso.get().load(R.drawable.sanmiglight)
 
+//        Picasso.get().load(R.drawable.sanmiglight)
+        Log.d("[MAIN]", "Current View: ${currentView.toString()}")
         if(currentView.equals("title")){
-            val btnLogin = titleBinding.hpLoginbtn
-            val btnSignUp = titleBinding.hpSignupbtn
-            btnLogin.setOnClickListener(View.OnClickListener {
+            Log.d("[MAIN]", "Buttons binded")
+            titleBinding.hpLoginbtn.setOnClickListener {
                 Toast.makeText(
                     baseContext,
                     "Tests",
                     Toast.LENGTH_SHORT
                 ).show()
                 moveToLoginActivity()
-            })
+            }
 
-            btnSignUp.setOnClickListener(View.OnClickListener {
+            titleBinding.hpSignupbtn.setOnClickListener{
                 moveToRegisterActivity()
-            })
+            }
         }
         else if(currentView.equals("home")){
 
@@ -77,14 +71,15 @@ class MainActivity : ComponentActivity() {
         super.onStart()
         val currentUser = auth.currentUser
 
+        Log.d("[onStart]", "onStart initialized")
         // need if else for checking authentication
         if(currentUser != null) {
             this.homepageBinding = HomepageBinding.inflate(layoutInflater)
-            setContentView(R.layout.homepage)
+            setContentView(homepageBinding.root)
             currentView = "home"
         }
         else {
-            setContentView(R.layout.title_page)
+            setContentView(titleBinding.root)
             currentView = "title"
         }
     }
