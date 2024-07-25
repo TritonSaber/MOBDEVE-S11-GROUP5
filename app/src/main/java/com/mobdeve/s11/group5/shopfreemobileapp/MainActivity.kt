@@ -33,16 +33,10 @@ class MainActivity : ComponentActivity() {
         auth = Firebase.auth
 
 
-//        Picasso.get().load(R.drawable.sanmiglight)
         Log.d("[MAIN]", "Current View: ${currentView.toString()}")
         if(currentView.equals("title")){
             Log.d("[MAIN]", "Buttons binded")
             titleBinding.hpLoginbtn.setOnClickListener {
-                Toast.makeText(
-                    baseContext,
-                    "Tests",
-                    Toast.LENGTH_SHORT
-                ).show()
                 moveToLoginActivity()
             }
 
@@ -51,20 +45,26 @@ class MainActivity : ComponentActivity() {
             }
         }
         else if(currentView.equals("home")){
+            homepageBinding.llViewFood.setOnClickListener{
 
+            }
+
+            homepageBinding.llMarkets.setOnClickListener{
+                moveToMarketActivity()
+            }
+
+            homepageBinding.llTransaction.setOnClickListener{
+
+            }
+
+            homepageBinding.llTrackOrder.setOnClickListener {
+
+            }
+
+            homepageBinding.ibProfilePicture.setOnClickListener {
+
+            }
         }
-    }
-
-    private fun moveToLoginActivity(){
-        val i = Intent(this@MainActivity, LoginActivity::class.java)
-
-        startActivity(i)
-    }
-
-    private fun moveToRegisterActivity(){
-        val i = Intent(this@MainActivity, RegisterActivity::class.java)
-
-        startActivity(i)
     }
 
     override fun onStart() {
@@ -84,5 +84,38 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun moveToLoginActivity(){
+        val i = Intent(this@MainActivity, LoginActivity::class.java)
 
+        startActivity(i)
+    }
+
+    private fun moveToRegisterActivity(){
+        val i = Intent(this@MainActivity, RegisterActivity::class.java)
+
+        startActivity(i)
+    }
+
+    private fun moveToViewFoodActivity(){
+//        val i = Intent(this@MainActivity, ViewFoodActivity::class.java)
+//        startActivity(i)
+    }
+
+    private fun moveToMarketActivity(){
+        val i = Intent(this@MainActivity, MarketActivity::class.java)
+
+        startActivity(i)
+    }
+
+    private fun moveToTransactionsActivity(){
+//        val i = Intent(this@MainActivity, TransactionsActivity::class.java)
+//
+//        startActivity(i)
+    }
+
+    private fun moveToTrackOrderActivity(){
+//        val i = Intent(this@MainActivity, TrackOrderActivity::class.java)
+//
+//        startActivity(i)
+    }
 }

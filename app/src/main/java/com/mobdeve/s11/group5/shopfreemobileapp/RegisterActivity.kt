@@ -1,6 +1,7 @@
 package com.mobdeve.s11.group5.shopfreemobileapp
 
 import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.ktx.firestore
@@ -23,22 +25,24 @@ class RegisterActivity: ComponentActivity() {
         private const val TAG = "RegisterActivity"
     }
     private lateinit var dbRef: FirebaseFirestore
-    private lateinit var viewBinding : SignupBinding
+    private lateinit var signupBinding : SignupBinding
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
 
-        val viewBinding : SignupBinding = SignupBinding.inflate(layoutInflater)
-        setContentView(viewBinding.root)
+        this.signupBinding = SignupBinding.inflate(layoutInflater)
+        setContentView(signupBinding.root)
 
-        this.viewBinding.signup.setOnClickListener(View.OnClickListener {
+        auth = Firebase.auth
 
-            val firstName = this.viewBinding.suFN.text.toString()
-            val lastName = this.viewBinding.suLN.text.toString()
-            val email = this.viewBinding.suEm.text.toString()
-            val password = this.viewBinding.suPass.text.toString()
-            val confirmPassword = this.viewBinding.suConfirm.text.toString()
+        this.signupBinding.suConfirm.setOnClickListener(View.OnClickListener {
+
+            val firstName = this.signupBinding.suFN.text.toString()
+            val lastName = this.signupBinding.suLN.text.toString()
+            val email = this.signupBinding.suEm.text.toString()
+            val password = this.signupBinding.suPass.text.toString()
+            val confirmPassword = this.signupBinding.suCPass.text.toString()
 
             val confirmation = confirmValid(firstName,lastName,email,password,confirmPassword)
             val checkPass = checkPassword(confirmation,password,confirmPassword)
@@ -61,6 +65,12 @@ class RegisterActivity: ComponentActivity() {
                                 .add(newAccount)
                                 .addOnSuccessListener { documentReference ->
                                     Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                                    Toast.makeText(
+                                        baseContext,
+                                        "Welcome to Shopfree!.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    redirectMain()
                                 }
                                 .addOnFailureListener { e ->
                                     Log.w(TAG, "Error adding document", e)
@@ -78,6 +88,11 @@ class RegisterActivity: ComponentActivity() {
                         }
                     }
             }
+        })
+
+        // Go back to title page
+        this.signupBinding.suBack.setOnClickListener(View.OnClickListener {
+            finish()
         })
 
     }
@@ -101,7 +116,19 @@ class RegisterActivity: ComponentActivity() {
             return true
         }
         else{
+            Toast.makeText(
+                baseContext,
+                "Passwords do not match. Please try again.",
+                Toast.LENGTH_SHORT
+            ).show()
             return false
         }
+    }
+
+    private fun redirectMain(){
+        val i = Intent(this@RegisterActivity, MainActivity::class.java)
+
+        startActivity(i)
+        finish()
     }
 }
