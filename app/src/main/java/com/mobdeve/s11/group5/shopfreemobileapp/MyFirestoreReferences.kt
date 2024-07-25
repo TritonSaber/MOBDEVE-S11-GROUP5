@@ -1,0 +1,9 @@
+package com.mobdeve.s11.group5.shopfreemobileapp
+
+object MyFirestoreReferences {
+    const val USERS_COLLECTION = "Users"
+
+    const val EMAIL_FIELD = "email"
+    const val FIRST_NAME_FIELD = "firstName"
+    const val LAST_NAME_FIELD = "lastName"
+}

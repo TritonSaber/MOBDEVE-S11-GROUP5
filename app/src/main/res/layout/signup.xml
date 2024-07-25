@@ -50,7 +50,7 @@
                 android:layout_marginEnd="20dp"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Name" />
+                android:text="First Name" />
 
             <EditText
                 android:id="@+id/suLN"
@@ -61,7 +61,7 @@
                 android:layout_marginEnd="20dp"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Name" />
+                android:text="Last Name" />
 
             <EditText
                 android:id="@+id/suEm"
@@ -72,7 +72,7 @@
                 android:layout_marginEnd="20dp"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Name" />
+                android:text="Email" />
 
             <EditText
                 android:id="@+id/suPass"
