@@ -6,10 +6,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.mobdeve.s11.group5.shopfreemobileapp.MyFirestoreReferences.EMAIL_FIELD
@@ -29,8 +27,13 @@ class RegisterActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
 
-        val viewBinding : SignupBinding = SignupBinding.inflate(layoutInflater)
+        this.viewBinding = SignupBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+
+        viewBinding.suBack.setOnClickListener {
+            //back button logic
+            finish()
+        }
 
         this.viewBinding.signup.setOnClickListener(View.OnClickListener {
 
