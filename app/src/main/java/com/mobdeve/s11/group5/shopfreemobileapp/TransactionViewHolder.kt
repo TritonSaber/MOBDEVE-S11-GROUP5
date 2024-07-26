@@ -11,7 +11,7 @@ class TransactionViewHolder (private val itemBinding: TransactionHistoryItemBind
     private var thiLocation: TextView = itemBinding.thiLocation
     private var thiName: TextView = itemBinding.thiName
     private var thiTotalItems: TextView = itemBinding.thiTotalItems
-    private var thiTotal: TextView = itWemBinding.thiTotal
+    private var thiTotal: TextView = itemBinding.thiTotal
 
     fun bindData (t: Transaction) {
         thiDateAndTime.text = t.tDate.toString()

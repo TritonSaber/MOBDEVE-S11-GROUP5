@@ -5,24 +5,24 @@ import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.mobdeve.s11.group5.shopfreemobileapp.databinding.TransactionHistoryBinding
+import com.mobdeve.s11.group5.shopfreemobileapp.databinding.TransactionBinding
 
-class TransactionActivity : ComponentActivity () {
+class TransactionHistoryActivity : ComponentActivity() {
     private lateinit var dbRef: FirebaseFirestore
-    private lateinit var viewBinding : TransactionHistoryBinding
+    private lateinit var viewBinding : TransactionBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var recyclerView: RecyclerView
-    private lateinit var transactionlist: ArrayList<Transaction>
+    private lateinit var productlist: ArrayList<Product>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        this.viewBinding = TransactionHistoryBinding.inflate(layoutInflater)
+        this.viewBinding = TransactionBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
         //this activity doesn't really mess with any form of data
 
-        this.recyclerView = viewBinding.thList
-        this.recyclerView.adapter = TransactionAdapter(transactionlist)
+        this.recyclerView = viewBinding.tFullList
+        this.recyclerView.adapter = TransactionHistoryAdapter(productlist)
     }
 }

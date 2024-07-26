@@ -8,7 +8,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.mobdeve.s11.group5.shopfreemobileapp.databinding.ProfileDialogBinding
@@ -57,7 +56,8 @@ class SettingsActivity : ComponentActivity () {
         return this?.let {
             val builder = AlertDialog.Builder(it)
             // The view binding instance of the dialogue box's layout
-            val profileDialog : ProfileDialogBinding = ProfileDialogBinding.inflate(it.layoutInflater)
+
+            var profileDialog : ProfileDialogBinding = ProfileDialogBinding.inflate(it.layoutInflater)
 
             if (origin == 1) {
                 profileDialog.pdTitle.text = "Change Phone Number"
@@ -84,15 +84,20 @@ class SettingsActivity : ComponentActivity () {
                             val user = auth.currentUser
                             if (user != null) {
                                 if (origin == 1) {
-                                    dbRef.collection(MyFirestoreReferences.USERS_COLLECTION).document(user.uid).update({})
+                                    dbRef.collection(MyFirestoreReferences.USERS_COLLECTION)
+                                        .document(user.uid).update( "phoneNum",
+                                            profileDialog.pdUserInput.text.toString()
+                                        )
                                 }
 
                                 if (origin == 2) {
-                                    dbRef.collection(MyFirestoreReferences.USERS_COLLECTION).document(user.uid).update({})
+                                    dbRef.collection(MyFirestoreReferences.USERS_COLLECTION)
+                                        .document(user.uid)
+                                        .update( "email", profileDialog.pdUserInput.text.toString())
                                 }
 
                                 if (origin == 3) {
-                                    auth.currentUser.updatePassword()
+                                    auth.currentUser?.updatePassword(profileDialog.pdUserInput.text.toString())
                                 }
                             }
                         }

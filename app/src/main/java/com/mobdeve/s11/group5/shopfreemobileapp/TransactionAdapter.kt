@@ -1,16 +1,12 @@
 package com.mobdeve.s11.group5.shopfreemobileapp
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.s11.group5.shopfreemobileapp.databinding.TransactionHistoryItemBinding
 
-class TransactionAdapter (transactionlist: ArrayList<Transaction>, nextActivityResultLauncher: ActivityResultLauncher<Intent>): RecyclerView.Adapter<TransactionViewHolder>()  {
+class TransactionAdapter (transactionlist: ArrayList<Transaction>): RecyclerView.Adapter<TransactionViewHolder>()  {
     private var transactionlist: ArrayList<Transaction> = transactionlist
-
-    private val nextActivityResultLauncher: ActivityResultLauncher<Intent> = nextActivityResultLauncher
 
     /*
         Things that we need this to do:
