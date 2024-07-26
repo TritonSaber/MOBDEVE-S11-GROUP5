@@ -73,6 +73,13 @@ class LoginActivity : ComponentActivity() {
         this.viewBinding.loginBack.setOnClickListener(View.OnClickListener {
             finish()
         })
+
+        this.viewBinding.loginReg.setOnClickListener(View.OnClickListener {
+            val i = Intent(this@LoginActivity, RegisterActivity::class.java)
+
+            startActivity(i)
+            finish()
+        })
     }
 
     private fun redirectMain(){

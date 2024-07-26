@@ -32,6 +32,7 @@ class MainActivity : ComponentActivity() {
 
         auth = Firebase.auth
 
+//        FirebaseAuth.getInstance().signOut()
 
         Log.d("[MAIN]", "Current View: ${currentView.toString()}")
         if(currentView.equals("title")){
@@ -45,19 +46,19 @@ class MainActivity : ComponentActivity() {
             }
         }
         else if(currentView.equals("home")){
-            homepageBinding.llViewFood.setOnClickListener{
+            homepageBinding.ibViewFood.setOnClickListener{
 
             }
 
-            homepageBinding.llMarkets.setOnClickListener{
+            homepageBinding.ibMarkets.setOnClickListener{
                 moveToMarketActivity()
             }
 
-            homepageBinding.llTransaction.setOnClickListener{
+            homepageBinding.ibTransaction.setOnClickListener{
 
             }
 
-            homepageBinding.llTrackOrder.setOnClickListener {
+            homepageBinding.ibTrackOrder.setOnClickListener {
 
             }
 

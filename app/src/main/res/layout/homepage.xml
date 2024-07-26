@@ -20,6 +20,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
 
+        <ImageButton
+            android:id="@+id/ibViewFood"
+            android:layout_width="match_parent"
+            android:layout_height="106dp"
+            android:layout_weight="1"
+            android:src="@drawable/food_market" />
+
         <TextView
             android:id="@+id/textView16"
             android:layout_width="match_parent"
@@ -41,6 +48,13 @@
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/llViewFood" >
+
+        <ImageButton
+            android:id="@+id/ibTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="178dp"
+            android:layout_weight="1"
+            android:src="@drawable/transaction_market" />
 
         <TextView
             android:id="@+id/textView21"
@@ -64,6 +78,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
 
+        <ImageButton
+            android:id="@+id/ibMarkets"
+            android:layout_width="match_parent"
+            android:layout_height="106dp"
+            android:layout_weight="1"
+            android:src="@drawable/market_view" />
+
         <TextView
             android:id="@+id/textView20"
             android:layout_width="match_parent"
@@ -86,6 +107,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/llMarkets">
 
+        <ImageButton
+            android:id="@+id/ibTrackOrder"
+            android:layout_width="match_parent"
+            android:layout_height="106dp"
+            android:layout_weight="1"
+            android:src="@drawable/map_market" />
+
         <TextView
             android:id="@+id/textView18"
             android:layout_width="match_parent"
@@ -107,6 +135,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/green_market" />
     </LinearLayout>
 
     <ImageButton
@@ -119,6 +153,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:src="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
