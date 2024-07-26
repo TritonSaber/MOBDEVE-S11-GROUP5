@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/psLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -23,7 +24,7 @@
         android:paddingStart="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout13">
+        app:layout_constraintTop_toBottomOf="@+id/psPasswordItem">
 
         <TextView
             android:id="@+id/textView28"
@@ -36,7 +37,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout11"
+        android:id="@+id/psPhoneItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -78,7 +79,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout12"
+        android:id="@+id/psEmailItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -87,7 +88,7 @@
         android:paddingEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
+        app:layout_constraintTop_toBottomOf="@+id/psPhoneItem">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -122,7 +123,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout13"
+        android:id="@+id/psPasswordItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -131,7 +132,7 @@
         android:paddingEnd="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
+        app:layout_constraintTop_toBottomOf="@+id/psEmailItem">
 
         <LinearLayout
             android:layout_width="wrap_content"
