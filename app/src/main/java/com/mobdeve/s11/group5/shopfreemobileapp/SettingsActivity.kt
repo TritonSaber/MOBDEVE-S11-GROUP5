@@ -41,6 +41,16 @@ class SettingsActivity : ComponentActivity () {
             //dialog
             showCustomDialogue(3)
         }
+
+        viewBinding.psLogout.setOnClickListener {
+            var executorService: ExecutorService = Executors.newSingleThreadExecutor();
+
+            executorService.execute {
+                auth.signOut()
+
+                //go back to the login page
+            }
+        }
     }
 
     private fun showCustomDialogue(origin: Int): Dialog {
