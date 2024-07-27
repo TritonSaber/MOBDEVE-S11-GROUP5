@@ -26,6 +26,12 @@
             android:exported="false"/>
         <activity android:name=".CartActivity"
             android:exported="false"/>
+        <activity android:name=".TransactionActivity"
+            android:exported="false"/>
+        <activity android:name=".TransactionHistoryActivity"
+            android:exported="false"/>
+        <activity android:name=".CategoryActivity"
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

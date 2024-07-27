@@ -88,6 +88,10 @@ class ProfileActivity : ComponentActivity () {
             intent.putExtra(IntentKey.EMAIL_KEY, auth.currentUser?.email)
             startActivity(intent)
         }
+
+        this.viewBinding.ppBack.setOnClickListener {
+            finish()
+        }
     }
 
 }
