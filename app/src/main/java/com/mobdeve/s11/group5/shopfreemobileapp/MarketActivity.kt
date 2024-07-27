@@ -26,8 +26,7 @@ class MarketActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-        this.marketlist = DataHelper.initializeMarketData()
+        this.marketlist = ArrayList<Market>()
         this.marketsBinding = MarketsBinding.inflate(layoutInflater)
         setContentView(marketsBinding.root)
 
@@ -36,29 +35,43 @@ class MarketActivity: ComponentActivity() {
 
         executorService.execute {
             dbRef = Firebase.firestore
-            dbRef.collection(MyFirestoreReferences.MARKET_COLLECTION).get().addOnSuccessListener {
+            dbRef.collection(MyFirestoreReferences.MARKET_COLLECTION).get().addOnSuccessListener { documentSnapshots ->
                 Log.d("[MARKET]", "Market collection is present")
                 collectionexist = true
+
+                Log.d("[MARKET]", documentSnapshots.documents.toString())
+                for (document in documentSnapshots) {
+                    Log.d("[MARKET]", "${document.id} => ${document.data["mname"]}")
+                    this.marketlist.add(Market (
+                        document.data["mname"].toString(),
+                        document.data["mloc"].toString(),
+                        document.data["mdesc"].toString(),
+                        document.data["mimage"].toString().toInt()
+                    ))
+
+                    runOnUiThread {
+                        Log.d("[MARKET]", "UI updated.")
+                        this.marketAdapter = MarketAdapter(marketlist)
+                        this.recyclerView.adapter = marketAdapter
+                    }
+                }
             }.addOnFailureListener{exception ->
                 Log.d("[MARKET]", "Market Error: $exception")
                 Log.d("[MARKET]", "Inserting new data")
-                var marketcollection = dbRef.collection(MyFirestoreReferences.MARKET_COLLECTION)
-                for (market in marketlist) {
-                    marketcollection.document().set(market)
-                }
-            }
-
-            runOnUiThread {
-                this.marketAdapter = MarketAdapter(marketlist)
-                this.recyclerView.adapter = marketAdapter
             }
         }
 
+        Log.d("[MARKET]", "$marketlist")
     }
 
     override fun onStart() {
         super.onStart()
-        Log.d("[MARKET]", "onStart called")
-
+        Log.d("[MARKET]", "Market onStart")
     }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("[MARKET]", "Market onResume")
+    }
+
 }
