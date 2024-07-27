@@ -32,8 +32,6 @@ class MainActivity : ComponentActivity() {
 
         auth = Firebase.auth
 
-//        FirebaseAuth.getInstance().signOut()
-
         Log.d("[MAIN]", "Current View: ${currentView.toString()}")
         if(currentView.equals("title")){
             Log.d("[MAIN]", "Buttons binded")
@@ -47,7 +45,7 @@ class MainActivity : ComponentActivity() {
         }
         else if(currentView.equals("home")){
             homepageBinding.ibViewFood.setOnClickListener{
-
+                moveToViewFoodActivity()
             }
 
             homepageBinding.ibMarkets.setOnClickListener{
@@ -63,7 +61,12 @@ class MainActivity : ComponentActivity() {
             }
 
             homepageBinding.ibProfilePicture.setOnClickListener {
-
+                Log.d("[MAIN]", "Profile Clicked")
+                val intent = Intent(
+                    this@MainActivity,
+                    ProfileActivity::class.java
+                )
+                startActivity(intent)
             }
             homepageBinding.hpHome.setOnClickListener {
                 //do nothing
@@ -108,7 +111,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         homepageBinding.ibViewFood.setOnClickListener{
-
+            moveToViewFoodActivity()
         }
 
         homepageBinding.ibMarkets.setOnClickListener{
@@ -124,7 +127,12 @@ class MainActivity : ComponentActivity() {
         }
 
         homepageBinding.ibProfilePicture.setOnClickListener {
-
+            Log.d("[MAIN]", "Profile Clicked")
+            val intent = Intent(
+                this@MainActivity,
+                ProfileActivity::class.java
+            )
+            startActivity(intent)
         }
         homepageBinding.hpHome.setOnClickListener {
             //do nothing
@@ -162,8 +170,12 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun moveToViewFoodActivity(){
-//        val i = Intent(this@MainActivity, ViewFoodActivity::class.java)
-//        startActivity(i)
+        Log.d("[MAIN]", "View Food Clicked")
+        val intent = Intent(
+            this@MainActivity,
+            CategoryActivity::class.java
+        )
+        startActivity(intent)
     }
 
     private fun moveToMarketActivity(){

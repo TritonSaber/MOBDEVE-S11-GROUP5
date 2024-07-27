@@ -31,6 +31,10 @@ class ProfileActivity : ComponentActivity () {
             val intent = Intent(this@ProfileActivity, SettingsActivity::class.java)
             startActivity(intent)
         }
+
+        this.viewBinding.ppBack.setOnClickListener {
+            finish()
+        }
     }
 
 }

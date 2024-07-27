@@ -50,6 +50,10 @@ class SettingsActivity : ComponentActivity () {
                 //go back to the login page
             }
         }
+
+        this.viewBinding.psBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun showCustomDialogue(origin: Int): Dialog {

@@ -77,79 +77,73 @@ class RegisterActivity: ComponentActivity() {
         this.signupBinding = SignupBinding.inflate(layoutInflater)
         setContentView(signupBinding.root)
 
-        signupBinding.suBack.setOnClickListener {
-            //back button logic
-            finish()
-        }
 
-        this.signupBinding.signup.setOnClickListener(View.OnClickListener {
-            auth = Firebase.auth
+        auth = Firebase.auth
 
-            this.signupBinding.suConfirm.setOnClickListener(View.OnClickListener {
+        this.signupBinding.suConfirm.setOnClickListener(View.OnClickListener {
 
-                val firstName = this.signupBinding.suFN.text.toString()
-                val lastName = this.signupBinding.suLN.text.toString()
-                val email = this.signupBinding.suEm.text.toString()
-                val password = this.signupBinding.suPass.text.toString()
-                val confirmPassword = this.signupBinding.suCPass.text.toString()
+            val firstName = this.signupBinding.suFN.text.toString()
+            val lastName = this.signupBinding.suLN.text.toString()
+            val email = this.signupBinding.suEm.text.toString()
+            val password = this.signupBinding.suPass.text.toString()
+            val confirmPassword = this.signupBinding.suCPass.text.toString()
 
-                val confirmation =
-                    confirmValid(firstName, lastName, email, password, confirmPassword)
-                val checkPass = checkPassword(confirmation, password, confirmPassword)
+            val confirmation =
+                confirmValid(firstName, lastName, email, password, confirmPassword)
+            val checkPass = checkPassword(confirmation, password, confirmPassword)
 
-                if (confirmation && checkPass) {
-                    dbRef = Firebase.firestore
+            if (confirmation && checkPass) {
+                dbRef = Firebase.firestore
 
-                    auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this) { task ->
-                            if (task.isSuccessful) {
-                                Log.d(TAG, "createUserWithEmail:success")
-                                val user = auth.currentUser
-                                val newAccount = hashMapOf(
-                                    FIRST_NAME_FIELD to firstName,
-                                    LAST_NAME_FIELD to lastName,
-                                    EMAIL_FIELD to email
-                                )
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            Log.d(TAG, "createUserWithEmail:success")
+                            val user = auth.currentUser
+                            val newAccount = hashMapOf(
+                                FIRST_NAME_FIELD to firstName,
+                                LAST_NAME_FIELD to lastName,
+                                EMAIL_FIELD to email
+                            )
 
-                                dbRef.collection(USERS_COLLECTION)
-                                    .add(newAccount)
-                                    .addOnSuccessListener { documentReference ->
-                                        Log.d(
-                                            TAG,
-                                            "DocumentSnapshot added with ID: ${documentReference.id}"
-                                        )
-                                        Toast.makeText(
-                                            baseContext,
-                                            "Welcome to Shopfree!.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                        redirectMain()
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w(TAG, "Error adding document", e)
-                                    }
+                            dbRef.collection(USERS_COLLECTION)
+                                .add(newAccount)
+                                .addOnSuccessListener { documentReference ->
+                                    Log.d(
+                                        TAG,
+                                        "DocumentSnapshot added with ID: ${documentReference.id}"
+                                    )
+                                    Toast.makeText(
+                                        baseContext,
+                                        "Welcome to Shopfree!.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    redirectMain()
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(TAG, "Error adding document", e)
+                                }
 
 
-                            } else {
-                                Log.w(
-                                    ContentValues.TAG,
-                                    "createUserWithEmail:failure",
-                                    task.exception
-                                )
-                                Toast.makeText(
-                                    baseContext,
-                                    "Failed to register user. Please try again.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                        } else {
+                            Log.w(
+                                ContentValues.TAG,
+                                "createUserWithEmail:failure",
+                                task.exception
+                            )
+                            Toast.makeText(
+                                baseContext,
+                                "Failed to register user. Please try again.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                }
-            })
-
-            // Go back to title page
-            this.signupBinding.suBack.setOnClickListener {
-                finish()
+                    }
             }
         })
+
+        // Go back to title page
+        this.signupBinding.suBack.setOnClickListener {
+            finish()
+        }
     }
 }
