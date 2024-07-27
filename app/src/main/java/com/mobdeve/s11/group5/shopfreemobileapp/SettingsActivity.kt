@@ -3,11 +3,13 @@ package com.mobdeve.s11.group5.shopfreemobileapp
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.mobdeve.s11.group5.shopfreemobileapp.databinding.ProfileDialogBinding
@@ -26,10 +28,13 @@ class SettingsActivity : ComponentActivity () {
         this.viewBinding = ProfileSettingsBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        viewBinding.psPhoneItem.setOnClickListener {
-            //dialog
-            showCustomDialogue(1)
-        }
+        val intent = Intent()
+        var email = intent.getStringExtra(IntentKey.EMAIL_KEY)
+
+        dbRef = Firebase.firestore
+        auth = Firebase.auth
+
+        viewBinding.psEmail.text = email
 
         viewBinding.psEmailItem.setOnClickListener {
             //dialog
@@ -83,12 +88,6 @@ class SettingsActivity : ComponentActivity () {
                             dbRef = Firebase.firestore
                             val user = auth.currentUser
                             if (user != null) {
-                                if (origin == 1) {
-                                    dbRef.collection(MyFirestoreReferences.USERS_COLLECTION)
-                                        .document(user.uid).update( "phoneNum",
-                                            profileDialog.pdUserInput.text.toString()
-                                        )
-                                }
 
                                 if (origin == 2) {
                                     dbRef.collection(MyFirestoreReferences.USERS_COLLECTION)
