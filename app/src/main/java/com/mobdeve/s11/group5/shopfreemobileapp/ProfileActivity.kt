@@ -20,6 +20,9 @@ class ProfileActivity : ComponentActivity () {
         this.viewBinding = ProfilePageBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
+        //empty for testing
+        transactionlist = ArrayList<Transaction>()
+
         this.recyclerView = viewBinding.ppTransactionHistory
         this.recyclerView.adapter = TransactionAdapter(transactionlist)
 

@@ -65,6 +65,26 @@ class MainActivity : ComponentActivity() {
             homepageBinding.ibProfilePicture.setOnClickListener {
 
             }
+            homepageBinding.hpHome.setOnClickListener {
+                //do nothing
+                Toast.makeText(this, "You're already at the home page!", Toast.LENGTH_SHORT).show()
+            }
+            homepageBinding.hpProfile.setOnClickListener {
+                Log.d("[MAIN]", "Profile Clicked")
+                val intent = Intent(
+                    this@MainActivity,
+                    ProfileActivity::class.java
+                )
+                startActivity(intent)
+            }
+            homepageBinding.hpCart.setOnClickListener {
+                Log.d("[MAIN]", "Cart Clicked")
+                val intent = Intent(
+                    this@MainActivity,
+                    CartActivity::class.java
+                )
+                startActivity(intent)
+            }
         }
     }
 
@@ -84,6 +104,50 @@ class MainActivity : ComponentActivity() {
             currentView = "title"
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        homepageBinding.ibViewFood.setOnClickListener{
+
+        }
+
+        homepageBinding.ibMarkets.setOnClickListener{
+            moveToMarketActivity()
+        }
+
+        homepageBinding.ibTransaction.setOnClickListener{
+
+        }
+
+        homepageBinding.ibTrackOrder.setOnClickListener {
+
+        }
+
+        homepageBinding.ibProfilePicture.setOnClickListener {
+
+        }
+        homepageBinding.hpHome.setOnClickListener {
+            //do nothing
+            Toast.makeText(this, "You're already at the home page!", Toast.LENGTH_SHORT).show()
+        }
+        homepageBinding.hpProfile.setOnClickListener {
+            Log.d("[MAIN]", "Profile Clicked")
+            val intent = Intent(
+                this@MainActivity,
+                ProfileActivity::class.java
+            )
+            startActivity(intent)
+        }
+        homepageBinding.hpCart.setOnClickListener {
+            Log.d("[MAIN]", "Cart Clicked")
+            val intent = Intent(
+                this@MainActivity,
+                CartActivity::class.java
+            )
+            startActivity(intent)
+        }
+    }
+
 
     private fun moveToLoginActivity(){
         val i = Intent(this@MainActivity, LoginActivity::class.java)

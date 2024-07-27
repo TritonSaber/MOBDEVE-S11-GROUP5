@@ -155,4 +155,39 @@
         app:layout_constraintVertical_bias="0.0"
         tools:src="@tools:sample/avatars" />
 
+    <LinearLayout
+        android:id="@+id/hpBottombar"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="#8BC34A"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/hpHome"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/home" />
+
+        <ImageButton
+            android:id="@+id/hpProfile"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageButton
+            android:id="@+id/hpCart"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/grocery_store" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
