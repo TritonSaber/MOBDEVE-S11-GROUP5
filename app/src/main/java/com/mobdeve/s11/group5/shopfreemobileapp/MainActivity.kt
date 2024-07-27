@@ -3,43 +3,151 @@ package com.mobdeve.s11.group5.shopfreemobileapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.mobdeve.s11.group5.shopfreemobileapp.databinding.SignupBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.mobdeve.s11.group5.shopfreemobileapp.databinding.HomepageBinding
 import com.mobdeve.s11.group5.shopfreemobileapp.databinding.TitlePageBinding
-import com.squareup.picasso.Picasso
-import com.mobdeve.s11.group5.shopfreemobileapp.databinding.DevAccessBinding
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     //Requisites
-    private lateinit var binding: TitlePageBinding
+//    private lateinit var view: DevAccessBinding
+    private lateinit var titleBinding: TitlePageBinding
+    private lateinit var homepageBinding: HomepageBinding
     private lateinit var recyclerView: RecyclerView
-    private var isAuthenticated: Boolean = false
-    private var currentView: String = ""
+    private lateinit var auth: FirebaseAuth
+    private var currentView: String = "title"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.homepage)
 
-        Picasso.get().load(R.drawable.sanmiglight)
+        this.titleBinding = TitlePageBinding.inflate(layoutInflater)
+        setContentView(titleBinding.root)
 
-        if(currentView == "title"){
-            this.binding.hpLoginbtn.setOnClickListener(View.OnClickListener {
+        auth = Firebase.auth
+
+//        FirebaseAuth.getInstance().signOut()
+
+        Log.d("[MAIN]", "Current View: ${currentView.toString()}")
+        if(currentView.equals("title")){
+            Log.d("[MAIN]", "Buttons binded")
+            titleBinding.hpLoginbtn.setOnClickListener {
                 moveToLoginActivity()
-            })
+            }
 
-            this.binding.hpSignupbtn.setOnClickListener(View.OnClickListener {
+            titleBinding.hpSignupbtn.setOnClickListener{
                 moveToRegisterActivity()
-            })
+            }
         }
-        else if(currentView == "home"){
+        else if(currentView.equals("home")){
+            homepageBinding.ibViewFood.setOnClickListener{
 
+            }
+
+            homepageBinding.ibMarkets.setOnClickListener{
+                moveToMarketActivity()
+            }
+
+            homepageBinding.ibTransaction.setOnClickListener{
+
+            }
+
+            homepageBinding.ibTrackOrder.setOnClickListener {
+
+            }
+
+            homepageBinding.ibProfilePicture.setOnClickListener {
+
+            }
+            homepageBinding.hpHome.setOnClickListener {
+                //do nothing
+                Toast.makeText(this, "You're already at the home page!", Toast.LENGTH_SHORT).show()
+            }
+            homepageBinding.hpProfile.setOnClickListener {
+                Log.d("[MAIN]", "Profile Clicked")
+                val intent = Intent(
+                    this@MainActivity,
+                    ProfileActivity::class.java
+                )
+                startActivity(intent)
+            }
+            homepageBinding.hpCart.setOnClickListener {
+                Log.d("[MAIN]", "Cart Clicked")
+                val intent = Intent(
+                    this@MainActivity,
+                    CartActivity::class.java
+                )
+                startActivity(intent)
+            }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+
+        Log.d("[onStart]", "onStart initialized")
+        // need if else for checking authentication
+        if(currentUser != null) {
+            this.homepageBinding = HomepageBinding.inflate(layoutInflater)
+            setContentView(homepageBinding.root)
+            currentView = "home"
+        }
+        else {
+            setContentView(titleBinding.root)
+            currentView = "title"
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        homepageBinding.ibViewFood.setOnClickListener{
+
+        }
+
+        homepageBinding.ibMarkets.setOnClickListener{
+            moveToMarketActivity()
+        }
+
+        homepageBinding.ibTransaction.setOnClickListener{
+
+        }
+
+        homepageBinding.ibTrackOrder.setOnClickListener {
+
+        }
+
+        homepageBinding.ibProfilePicture.setOnClickListener {
+
+        }
+        homepageBinding.hpHome.setOnClickListener {
+            //do nothing
+            Toast.makeText(this, "You're already at the home page!", Toast.LENGTH_SHORT).show()
+        }
+        homepageBinding.hpProfile.setOnClickListener {
+            Log.d("[MAIN]", "Profile Clicked")
+            val intent = Intent(
+                this@MainActivity,
+                ProfileActivity::class.java
+            )
+            startActivity(intent)
+        }
+        homepageBinding.hpCart.setOnClickListener {
+            Log.d("[MAIN]", "Cart Clicked")
+            val intent = Intent(
+                this@MainActivity,
+                CartActivity::class.java
+            )
+            startActivity(intent)
+        }
+    }
+
 
     private fun moveToLoginActivity(){
         val i = Intent(this@MainActivity, LoginActivity::class.java)
@@ -53,19 +161,26 @@ class MainActivity : AppCompatActivity() {
         startActivity(i)
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        // need if else for checking authentication
-        if(isAuthenticated) {
-            setContentView(R.layout.title_page)
-            currentView = "title"
-        }
-        else {
-            setContentView(R.layout.homepage)
-            currentView = "home"
-        }
+    private fun moveToViewFoodActivity(){
+//        val i = Intent(this@MainActivity, ViewFoodActivity::class.java)
+//        startActivity(i)
     }
 
+    private fun moveToMarketActivity(){
+        val i = Intent(this@MainActivity, MarketActivity::class.java)
 
+        startActivity(i)
+    }
+
+    private fun moveToTransactionsActivity(){
+//        val i = Intent(this@MainActivity, TransactionsActivity::class.java)
+//
+//        startActivity(i)
+    }
+
+    private fun moveToTrackOrderActivity(){
+//        val i = Intent(this@MainActivity, TrackOrderActivity::class.java)
+//
+//        startActivity(i)
+    }
 }
