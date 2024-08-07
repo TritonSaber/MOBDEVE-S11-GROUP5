@@ -55,8 +55,8 @@ class ProductActivity : ComponentActivity() {
 
         executorService.execute {
             //get the cart from firestore or firebase cache
-            val sample = Product(1, "San Miguel Light", 1, 50.00, R.drawable.sanmiglight, 0, "250 ml", "Drinks",null)
-            productList.add(sample)
+            //val sample = Product(1, "San Miguel Light", 1, 50.00, R.drawable.sanmiglight, 0, "250 ml", "Drinks",null)
+            //productList.add(sample)
             Log.d("[CART]", "${productList}")
 
             runOnUiThread {

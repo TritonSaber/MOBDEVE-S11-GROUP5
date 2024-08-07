@@ -22,17 +22,23 @@ class MainActivity : ComponentActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var auth: FirebaseAuth
     private var currentView: String = "title"
-
+    companion object {
+        lateinit var PACKAGE_NAME: String
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        //get package name
+        PACKAGE_NAME = applicationContext.packageName
 
         this.titleBinding = TitlePageBinding.inflate(layoutInflater)
         setContentView(titleBinding.root)
 
         auth = Firebase.auth
 
-        Log.d("[MAIN]", "Current View: ${currentView.toString()}")
+
+        Log.d("[MAIN]", "Current View: $currentView ")
         if(currentView.equals("title")){
             Log.d("[MAIN]", "Buttons binded")
             titleBinding.hpLoginbtn.setOnClickListener {

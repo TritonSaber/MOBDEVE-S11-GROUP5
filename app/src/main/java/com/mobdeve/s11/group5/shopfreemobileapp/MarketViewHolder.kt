@@ -17,7 +17,7 @@ class MarketViewHolder (private val itemBinding: MarketItemBinding): RecyclerVie
     fun bindData(m: Market) {
         Log.d("[MARKET]", "Binding: $m")
         miName.text = m.mName
-        Picasso.get().load(m.mImage).into(this.miImage)
+        Picasso.get().load(m.mImageURI).into(this.miImage)
         miLoc.text = m.mLoc
     }
 }

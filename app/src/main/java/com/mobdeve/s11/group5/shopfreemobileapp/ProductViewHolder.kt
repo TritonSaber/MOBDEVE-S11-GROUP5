@@ -20,6 +20,6 @@ class ProductViewHolder(private val itemBinding: ProductItemBinding): RecyclerVi
             piDesc.text = "₱" + p.pPrice
         }
 
-        Picasso.get().load(p.imageUri).into(this.piImage)
+        Picasso.get().load(p.imageUri).into(this.piImage) //load the downloaded image
     }
 }
