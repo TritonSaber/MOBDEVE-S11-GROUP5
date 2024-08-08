@@ -14,6 +14,6 @@ class CategoryViewHolder(private val itemBinding: CategoryViewBinding): Recycler
     fun bindData(c: Category){
         Log.d("[CATEGORY]", "Binding: $c")
         pcName.text = c.cCategoryName
-        Picasso.get().load(c.cImage)
+        Picasso.get().load(c.cImageURI).into(this.pcImage)
     }
 }

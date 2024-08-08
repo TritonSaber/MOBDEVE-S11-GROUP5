@@ -15,7 +15,7 @@ class TransactionHistoryViewHolder (private val itemBinding: TransactionItemBind
 
     fun bindData(p: Product) {
         tiName.text = p.pName
-        Picasso.get().load(p.imageUri).into(this.tiImage)
+        Picasso.get().load(p.pImageUri).into(this.tiImage)
         tiDesc.text = p.pDesc
         //this will probably be 0
         tiQuantity.text = p.pQuantity.toString()

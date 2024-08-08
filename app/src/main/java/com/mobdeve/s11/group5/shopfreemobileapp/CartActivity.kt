@@ -55,6 +55,7 @@ class CartActivity() : ComponentActivity() {
         setContentView(R.layout.cart)
 
         //sample data
+        cart = ArrayList<Product>()
 
 
         this.recyclerView = findViewById(R.id.cRecycler)
@@ -70,9 +71,6 @@ class CartActivity() : ComponentActivity() {
             dbRef = Firebase.firestore
 
             executorService.execute {
-                //upload dummy data
-
-                //retrieve data
 
                 //pass data properly
 

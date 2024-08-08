@@ -38,7 +38,7 @@ class CartViewHolder (private val itemBinding: CartItemBinding): RecyclerView.Vi
     fun bindData(p: Product) {
         Log.d("[CART]", "Binding this piece of data: $p")
         ciName.text = p.pName
-        Picasso.get().load(p.imageUri).into(this.ciImage)
+        Picasso.get().load(p.pImageUri).into(this.ciImage)
         ciDesc.text = p.pDesc
         //this will probably be 0
         ciTotal.text = ((p.pQuantity!!.toInt() * p.pPrice).toString())

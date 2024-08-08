@@ -37,7 +37,7 @@ class DataHelper {
                     "Robinsons Supermarket Otis",
                     200.00,
                     "images/${R.drawable.honeycrisp}",
-                    null,
+                    parseFirestoreImageURL(R.drawable.honeycrisp),
                     0,
                     null,
                     "Fruits",
@@ -50,7 +50,7 @@ class DataHelper {
                     "SM City Manila",
                     150.00,
                     "images/${R.drawable.honeycrisp}",
-                    null,
+                    parseFirestoreImageURL(R.drawable.honeycrisp),
                     0,
                     null,
                     "Fruits",
@@ -59,18 +59,82 @@ class DataHelper {
             )
             data.add(
                 Product (
-                    "Honeycrisp Apple",
+                    "Pork Lomo",
                     "SM City Manila",
-                    150.00,
-                    "images/${R.drawable.honeycrisp}",
-                    null,
+                    325.00,
+                    "images/${R.drawable.porklomo}",
+                    parseFirestoreImageURL(R.drawable.porklomo),
                     0,
                     null,
-                    "Fruits",
+                    "Meats",
                     "kg"
                 )
             )
+            data.add(
+                Product (
+                    "Pork Lomo",
+                    "Robinsons Supermarket Otis",
+                    325.00,
+                    "images/${R.drawable.porklomo}",
+                    parseFirestoreImageURL(R.drawable.porklomo),
+                    0,
+                    null,
+                    "Meats",
+                    "kg"
+                )
+            )
+            data.add(
+                Product (
+                    "Broccoli",
+                    "Robinsons Supermarket Otis",
+                    325.00,
+                    "images/${R.drawable.broccoli}",
+                    parseFirestoreImageURL(R.drawable.broccoli),
+                    0,
+                    null,
+                    "Vegetables",
+                    "kg"
+                )
+            )
+            data.add(
+                Product (
+                    "Broccoli",
+                    "SM City Manila",
+                    325.00,
+                    "images/${R.drawable.broccoli}",
+                    parseFirestoreImageURL(R.drawable.broccoli),
+                    0,
+                    null,
+                    "Vegetables",
+                    "kg"
+                )
+            )
+            return data
+        }
 
+        fun initializeCategoryData() : ArrayList<Category> {
+            var data = ArrayList<Category>()
+            data.add(
+                Category(
+                    "Fruits",
+                    parseFirestoreImageURL(R.drawable.category_fruits),
+                    "images/${R.drawable.category_fruits}"
+                )
+            )
+            data.add(
+                Category(
+                    "Meats",
+                    parseFirestoreImageURL(R.drawable.category_meats),
+                    "images/${R.drawable.category_meats}"
+                )
+            )
+            data.add(
+                Category(
+                    "Vegetables",
+                    parseFirestoreImageURL(R.drawable.category_vegetables),
+                    "images/${R.drawable.category_vegetables}"
+                )
+            )
             return data
         }
 

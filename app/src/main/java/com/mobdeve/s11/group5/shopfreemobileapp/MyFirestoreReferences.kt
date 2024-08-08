@@ -14,4 +14,8 @@ object MyFirestoreReferences {
     const val MARKET_IMAGE_FIELD = "marketImage"
 
     const val TRANSACTION_COLLECTION = "Transactions"
+
+    const val PRODUCT_COLLECTION = "Products"
+
+    const val CATEGORY_COLLECTION = "Categorys"
 }

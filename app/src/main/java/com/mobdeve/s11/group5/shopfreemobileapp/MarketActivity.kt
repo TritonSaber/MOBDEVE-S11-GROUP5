@@ -71,24 +71,28 @@ class MarketActivity: ComponentActivity() {
                 for (document in documentSnapshots) {
                     Log.d("[MARKET]", "${document.id} => ${document.data["mname"]}")
 
-                    var imagefile = storageRef.child(document.data["mdownloadurl"].toString())
+                    var imagefile = storageRef.child(document.data["mstorageURL"].toString())
 
                     imagefile.downloadUrl.addOnSuccessListener { image ->
                         var downloadUri = image
-                        this.marketlist.add(Market (
+
+                        this.marketlist.add(
+                            Market (
                             document.data["mname"].toString(),
                             document.data["mloc"].toString(),
                             document.data["mdesc"].toString(),
                             downloadUri,
-                            document.data["mdownloadurl"].toString()
+                            document.data["mstorageURL"].toString()
                         ))
+                    }.addOnCompleteListener {
+                        runOnUiThread {
+                            Log.d("[MARKET]", "UI updated.")
+
+                            this.marketAdapter = MarketAdapter(marketlist)
+                            this.recyclerView.adapter = marketAdapter
+                        }
                     }
 
-                    runOnUiThread {
-                        Log.d("[MARKET]", "UI updated.")
-                        this.marketAdapter = MarketAdapter(marketlist)
-                        this.recyclerView.adapter = marketAdapter
-                    }
                 }
             }.addOnFailureListener{exception ->
                 Log.d("[MARKET]", "Market Error: $exception")
@@ -122,7 +126,7 @@ class MarketActivity: ComponentActivity() {
                             Log.d("[MARKET]", "${document.id} => ${document.data["mname"]}")
 
                             var imagefile =
-                                storageRef.child(document.data["mdownloadurl"].toString())
+                                storageRef.child(document.data["mstorageURL"].toString())
 
                             imagefile.downloadUrl.addOnSuccessListener { image ->
                                 var downloadUri = image
@@ -132,15 +136,15 @@ class MarketActivity: ComponentActivity() {
                                         document.data["mloc"].toString(),
                                         document.data["mdesc"].toString(),
                                         downloadUri,
-                                        document.data["mdownloadurl"].toString()
+                                        document.data["mstorageURL"].toString()
                                     )
                                 )
-                            }
-
-                            runOnUiThread {
-                                Log.d("[MARKET]", "UI updated.")
-                                this.marketAdapter = MarketAdapter(marketlist)
-                                this.recyclerView.adapter = marketAdapter
+                            }.addOnCompleteListener {
+                                runOnUiThread {
+                                    Log.d("[MARKET]", "UI updated.")
+                                    this.marketAdapter = MarketAdapter(marketlist)
+                                    this.recyclerView.adapter = marketAdapter
+                                }
                             }
                         }
                     }

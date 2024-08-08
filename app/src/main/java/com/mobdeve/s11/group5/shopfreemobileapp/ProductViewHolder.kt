@@ -15,11 +15,11 @@ class ProductViewHolder(private val itemBinding: ProductItemBinding): RecyclerVi
         piName.text = p.pName
         //this'll be Price in this case
         if (p.pPerWeight != null) {
-            piDesc.text = "₱" + p.pPrice + " " + p.pPerWeight //this'll work if it's per weight or not
+            piDesc.text = "₱" + p.pPrice + " " + p.pPerWeight //this'll work if it's per weight or nots
         } else {
             piDesc.text = "₱" + p.pPrice
         }
 
-        Picasso.get().load(p.imageUri).into(this.piImage) //load the downloaded image
+        Picasso.get().load(p.pImageUri).into(this.piImage) //load the downloaded image
     }
 }

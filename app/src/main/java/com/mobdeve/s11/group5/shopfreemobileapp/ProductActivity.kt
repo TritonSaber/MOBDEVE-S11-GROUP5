@@ -9,6 +9,10 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.storage
 import com.mobdeve.s11.group5.shopfreemobileapp.databinding.ProductsBinding
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -16,8 +20,10 @@ import java.util.concurrent.Executors
 class ProductActivity : ComponentActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
+    private lateinit var dbRef: FirebaseFirestore
     private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
-    private var productList: ArrayList<Product> = arrayListOf<Product>()
+    private var productList: ArrayList<Product> = ArrayList<Product>()
+    private val storage = Firebase.storage
 
     private val myActivityResultLauncher = registerForActivityResult<Intent, ActivityResult>(
         ActivityResultContracts.StartActivityForResult(),
@@ -54,15 +60,97 @@ class ProductActivity : ComponentActivity() {
         }
 
         executorService.execute {
-            //get the cart from firestore or firebase cache
-            //val sample = Product(1, "San Miguel Light", 1, 50.00, R.drawable.sanmiglight, 0, "250 ml", "Drinks",null)
-            //productList.add(sample)
-            Log.d("[CART]", "${productList}")
+            var intent = intent
+            var category: String? = intent.getStringExtra(IntentKey.CATEGORY_KEY)
+            //based on category get the stuff
 
-            runOnUiThread {
-                //cartAdapter code + myActivityResultLauncher
-                this.productAdapter = ProductAdapter(productList, myActivityResultLauncher)
-                this.recyclerView.setAdapter(productAdapter)
+            executorService.execute {
+                dbRef = Firebase.firestore
+
+                var storageRef = storage.reference
+
+                dbRef.collection(MyFirestoreReferences.PRODUCT_COLLECTION).whereEqualTo("pcategory", category).get().addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        Log.d("[PRODUCT]", "${document.id} => ${document.data}")
+                        var imagefile = storageRef.child(document.data["pstorageURL"].toString())
+                        imagefile.downloadUrl.addOnSuccessListener { image ->
+                            var downloaduri = image
+
+                            this.productList.add(
+                                Product(
+                                    document.data["pname"].toString(),
+                                    document.data["plocId"].toString(),
+                                    document.data["pprice"].toString().toDouble(),
+                                    document.data["pstorageURL"].toString(),
+                                    downloaduri,
+                                    null, //no need for this yet
+                                    document.data["pdesc"].toString(),
+                                    document.data["pcategory"].toString(),
+                                    document.data["pperWeight"].toString()
+                                )
+                            )
+                        }.addOnFailureListener { task ->
+                            Log.d("[CATEGORY]", "${task.stackTrace}")
+                        }.addOnCompleteListener {
+                            Log.d("[CATEGORY]", "Categorylist: $productList")
+                            runOnUiThread {
+                                Log.d("[Category]", "UI updated.")
+                                this.productAdapter = ProductAdapter(productList, myActivityResultLauncher)
+                                this.recyclerView.adapter = productAdapter
+                            }
+                        }
+                    }
+                }.addOnFailureListener {
+                    productList = DataHelper.inititalizeProductData()
+                    for (product in productList) {
+
+                        var fileref = storageRef.child(product.pStorageURL)
+
+                        product.pImageUri?.let {
+                            fileref.putFile(it).addOnSuccessListener {
+                                Log.d("[PRODUCT]", "Product List has been created")
+                            }
+                        }
+                        dbRef.collection(MyFirestoreReferences.PRODUCT_COLLECTION).document().set(product).addOnFailureListener {task ->
+                            Log.d("[PRODUCT]", "Data upload failed: ${task.stackTrace}")
+                        }
+                    }
+
+                    dbRef.collection(MyFirestoreReferences.PRODUCT_COLLECTION).whereEqualTo("pcategory", category).get().addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            Log.d("[PRODUCT]", "${document.id} => ${document.data}")
+                            var imagefile = storageRef.child(document.data["pstorageURL"].toString())
+                            imagefile.downloadUrl.addOnSuccessListener { image ->
+                                var downloaduri = image
+
+                                this.productList.add(
+                                    Product(
+                                        document.data["pname"].toString(),
+                                        document.data["plocId"].toString(),
+                                        document.data["pprice"].toString().toDouble(),
+                                        document.data["pstorageURL"].toString(),
+                                        downloaduri,
+                                        null, //no need for this yet
+                                        document.data["pdesc"].toString(),
+                                        document.data["pcategory"].toString(),
+                                        document.data["pperWeight"].toString()
+                                    )
+                                )
+                            }.addOnFailureListener { task ->
+                                Log.d("[CATEGORY]", "${task.stackTrace}")
+                            }.addOnCompleteListener {
+                                Log.d("[CATEGORY]", "Categorylist: $productList")
+                                runOnUiThread {
+                                    Log.d("[Category]", "UI updated.")
+                                    this.productAdapter = ProductAdapter(productList, myActivityResultLauncher)
+                                    this.recyclerView.adapter = productAdapter
+                                }
+                            }
+                        }
+                    }
+
+                }
+
             }
         }
 
