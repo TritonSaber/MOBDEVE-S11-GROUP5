@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
@@ -71,9 +72,14 @@ class CartActivity() : ComponentActivity() {
             dbRef = Firebase.firestore
 
             executorService.execute {
+                auth = Firebase.auth
+                var userrn = auth.currentUser?.uid
+                dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).whereEqualTo("userid", userrn).get().addOnSuccessListener {
 
-                //pass data properly
+                }.addOnFailureListener {
+                    //make the user transaction
 
+                }
             }
 
             runOnUiThread {

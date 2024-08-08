@@ -1,5 +1,6 @@
 package com.mobdeve.s11.group5.shopfreemobileapp
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,10 +8,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
 import com.mobdeve.s11.group5.shopfreemobileapp.databinding.ProductItemBinding
 
-class ProductAdapter (productlist: ArrayList<Product>, nextActivityResultLauncher: ActivityResultLauncher<Intent>): RecyclerView.Adapter<ProductViewHolder>() {
+class ProductAdapter (productlist: ArrayList<Product>, nextActivityResultLauncher: ActivityResultLauncher<Intent>, activityContext: Context): RecyclerView.Adapter<ProductViewHolder>() {
     private val productlist: ArrayList<Product> = productlist
-
     private val nextActivityResultLauncher: ActivityResultLauncher<Intent> = nextActivityResultLauncher
+    private val activitycontext: Context = activityContext
 
     override fun getItemCount(): Int {
         return this.productlist.size
@@ -20,6 +21,13 @@ class ProductAdapter (productlist: ArrayList<Product>, nextActivityResultLaunche
         val itemBinding =
             ProductItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val productViewHolder = ProductViewHolder(itemBinding)
+
+        //open up a new activity
+        var intent = Intent(activitycontext, ProductBuyActivity::class.java)
+
+        intent.putExtra(IntentKey.PRODUCT_KEY, productlist[productViewHolder.bindingAdapterPosition].pName)
+
+        //launch the new activity
 
 
         return productViewHolder

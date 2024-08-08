@@ -95,7 +95,7 @@ class ProductActivity : ComponentActivity() {
                             Log.d("[CATEGORY]", "Categorylist: $productList")
                             runOnUiThread {
                                 Log.d("[Category]", "UI updated.")
-                                this.productAdapter = ProductAdapter(productList, myActivityResultLauncher)
+                                this.productAdapter = ProductAdapter(productList, myActivityResultLauncher, this@ProductActivity)
                                 this.recyclerView.adapter = productAdapter
                             }
                         }
@@ -142,7 +142,7 @@ class ProductActivity : ComponentActivity() {
                                 Log.d("[CATEGORY]", "Categorylist: $productList")
                                 runOnUiThread {
                                     Log.d("[Category]", "UI updated.")
-                                    this.productAdapter = ProductAdapter(productList, myActivityResultLauncher)
+                                    this.productAdapter = ProductAdapter(productList, myActivityResultLauncher, this@ProductActivity)
                                     this.recyclerView.adapter = productAdapter
                                 }
                             }
