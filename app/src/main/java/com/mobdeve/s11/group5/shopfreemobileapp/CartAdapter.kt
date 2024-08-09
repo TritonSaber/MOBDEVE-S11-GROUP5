@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
@@ -45,6 +46,8 @@ class CartAdapter (cart: ArrayList<CartItem>, nextActivityResultLauncher: Activi
 
         //get the actual cart
         dbRef = Firebase.firestore
+        auth = Firebase.auth
+        products = ArrayList()
         var storageRef = storage.reference
         var currentuser = auth.currentUser?.uid
 
@@ -89,7 +92,7 @@ class CartAdapter (cart: ArrayList<CartItem>, nextActivityResultLauncher: Activi
                     //database error wahoo
                 } else {
                     //remove the specific item from the cart
-                    var docref = document.documents[0].id
+                    var docref = document.documents.first().id
                     dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).document(docref).update(
                         hashMapOf<String, Any>(
                             "cart.$docref" to FieldValue.delete()
@@ -135,6 +138,10 @@ class CartAdapter (cart: ArrayList<CartItem>, nextActivityResultLauncher: Activi
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        holder.bindData(this.products[position])
+        if (products.isEmpty()) {
+            Log.d("[TRANSACTION]", "User does not have anything in their cart yet")
+        } else {
+            holder.bindData(this.products[position])
+        }
     }
 }

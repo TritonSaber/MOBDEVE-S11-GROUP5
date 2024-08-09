@@ -22,6 +22,7 @@ class CategoryAdapter(categoryList: ArrayList<Category>, activityContext : Conte
 
         categoryViewHolder.itemView.setOnClickListener {
             //based on the name of the thing we'll get the category of items related ot it
+            Log.d("[CATEGORY]", "Item clicked.")
             intent.putExtra(IntentKey.CATEGORY_KEY, categoryList[categoryViewHolder.bindingAdapterPosition].cCategoryName)
 
             //no need for result launcher

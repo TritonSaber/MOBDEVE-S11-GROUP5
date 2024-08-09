@@ -4,6 +4,6 @@ data class Transaction (
     public var tUserid: String?,
     public var tDate: String,
     public var tTotal: Double?,
-    public var tCart: ArrayList<CartItem>,
+    public var cart: ArrayList<CartItem>,
     public var tCompleted: Boolean?
 )

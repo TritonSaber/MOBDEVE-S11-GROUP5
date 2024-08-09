@@ -3,8 +3,11 @@ package com.mobdeve.s11.group5.shopfreemobileapp
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -33,6 +36,7 @@ class ProductBuyActivity: ComponentActivity() {
     private lateinit var selectedProduct: CartItem
     private lateinit var loclist: ArrayList<ProductBuy>
     private lateinit var pricelist: ArrayList<String>
+    private lateinit var locationid: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +50,39 @@ class ProductBuyActivity: ComponentActivity() {
 
         dbRef = Firebase.firestore
         var storageRef = storage.reference
+        var productname = intent.getStringExtra(IntentKey.PRODUCT_KEY)
 
-        mySpinner.setOnItemClickListener { parent, view, position, id ->
-            var locationid = loclist
+        productbuyBinding.pbName.text = productname
+
+        mySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                // Get the selected item
+                locationid = loclist[position].pLocId
+
+                //update the thingy
+                runOnUiThread {
+                    productbuyBinding.pbPrice.text = loclist[position].pPrice.toString()
+                    productbuyBinding.pbLoc.text = loclist[position].pLocId
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        productbuyBinding.addBtn.setOnClickListener {
+            var change = productbuyBinding.itemQuanEt.text.toString().toInt() + 1
+            productbuyBinding.itemQuanEt.setText(change.toString(), TextView.BufferType.EDITABLE)
+        }
+
+        productbuyBinding.removeBtn.setOnClickListener {
+            var change = productbuyBinding.itemQuanEt.text.toString().toInt() - 1
+            productbuyBinding.itemQuanEt.setText(change.toString(), TextView.BufferType.EDITABLE)
         }
 
         productbuyBinding.pbCard.setOnClickListener {
             //no need to go to cart
-
             executorService.execute {
                 //put it to the cart
                 auth = Firebase.auth
@@ -63,19 +92,33 @@ class ProductBuyActivity: ComponentActivity() {
                 //get their cart
                 if (user != null) {
                     dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION)
-                        .whereEqualTo("userid", user)
-                        .whereEqualTo("tcompleted", false)
+                        .whereEqualTo("tuserid", user).whereEqualTo("tcompleted", false)
                         .get().addOnSuccessListener { documents ->
+                            Log.d("[TRANSACTION]", "Received data: ${documents.documents}")
                             if (documents.documents.size > 1) {
                                 Log.d("[TRANSACTION]", "ERROR USER HAS TWO ACTIVE CARTS")
                             } else {
-                                var docref = documents.documents[0].id
+                                //the cart
+                                Log.d("[TRANSACTION]", "User Cart: ${documents.documents.first().id} => ${documents.documents.first().data}")
+                                var docref = documents.documents.first().id
+                                var productid = String()
 
                                 //find the specific item and pass the ID instead, less stuff to pass
+                                dbRef.collection(MyFirestoreReferences.PRODUCT_COLLECTION)
+                                    .whereEqualTo("plocId", locationid)
+                                    .whereEqualTo("pname", productname)
+                                    .get().addOnSuccessListener { document ->
+                                    productid = document.documents[0].id
+                                }.addOnCompleteListener {
+                                    selectedProduct = CartItem(productid, productbuyBinding.itemQuanEt.text.toString().toInt())
+                                    dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION)
+                                        .document(docref)
+                                        .update("cart", FieldValue.arrayUnion(selectedProduct))
 
-                                dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION)
-                                    .document(docref)
-                                    .update("cart.$docref", FieldValue.arrayUnion(selectedProduct))
+                                        runOnUiThread {
+                                            finish()
+                                        }
+                                }
                             }
                     }
                 }
@@ -84,7 +127,7 @@ class ProductBuyActivity: ComponentActivity() {
 
         executorService.execute {
             dbRef.collection(MyFirestoreReferences.PRODUCT_COLLECTION)
-                .whereEqualTo("pname", intent.getStringExtra(IntentKey.PRODUCT_KEY))
+                .whereEqualTo("pname", productname)
                 .get().addOnSuccessListener { documents ->
                     var imageref = documents.documents[0].data?.get("pstorageURL")?.toString()
                         ?.let { storageRef.child(it) }
@@ -100,7 +143,7 @@ class ProductBuyActivity: ComponentActivity() {
                             )
                         )
                         pricelist.add(
-                            document.data["pprice"].toString()
+                            document.data["plocId"].toString()
                         )
                     }
                     spinnerAdapter = ArrayAdapter(this, R.layout.textvew_black, pricelist)

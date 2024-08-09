@@ -71,6 +71,7 @@ class CategoryActivity: ComponentActivity() {
                             }
                         }
                     }
+
                 }.addOnFailureListener {
                 Log.d("[CATEGORY]", "Failure: Initializing Categories")
                 this.categoryList = DataHelper.initializeCategoryData()

@@ -74,7 +74,8 @@ class CartActivity() : ComponentActivity() {
             //cart.add(sample)
             //Log.d("[CART]", "${cart}")
 
-            cart = ArrayList()
+            cart = ArrayList<CartItem>()
+            cart.add(CartItem(null,null))
 
             //get the cart from the db
             dbRef = Firebase.firestore
@@ -82,8 +83,8 @@ class CartActivity() : ComponentActivity() {
             executorService.execute {
                 auth = Firebase.auth
                 var userrn = auth.currentUser?.uid
-                dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).whereEqualTo("userid", userrn).get().addOnSuccessListener {
-
+                dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).whereEqualTo("userid", userrn).whereEqualTo("tcompleted", false).get().addOnSuccessListener { task ->
+                    Log.d("[TRANSACTION]", "Success: ${task}")
                 }.addOnFailureListener {
                     //make the user transaction
                     var usercart = Transaction(
@@ -98,14 +99,16 @@ class CartActivity() : ComponentActivity() {
                     }.addOnFailureListener { task ->
                         Log.d("[TRANSACTION]", "Failed to create: ${task.stackTrace} ")
                     }
+                }.addOnCompleteListener {
+                    runOnUiThread {
+                        //cartAdapter code + myActivityResultLauncher
+                        this.cartAdapter = CartAdapter(cart, myActivityResultLauncher)
+                        this.recyclerView.setAdapter(cartAdapter)
+                    }
                 }
             }
 
-            runOnUiThread {
-                //cartAdapter code + myActivityResultLauncher
-                this.cartAdapter = CartAdapter(cart, myActivityResultLauncher)
-                this.recyclerView.setAdapter(cartAdapter)
-            }
+
         }
 
 

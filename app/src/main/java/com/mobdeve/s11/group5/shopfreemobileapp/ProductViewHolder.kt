@@ -1,5 +1,6 @@
 package com.mobdeve.s11.group5.shopfreemobileapp
 
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ class ProductViewHolder(private val itemBinding: ProductItemBinding): RecyclerVi
 
 
     fun bindData(p : Product) {
+        Log.d("[PRODUCT]", "Binding: $p")
         piName.text = p.pName
         //this'll be Price in this case
         if (p.pPerWeight != null) {

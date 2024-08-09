@@ -32,6 +32,8 @@
             android:exported="false"/>
         <activity android:name=".CategoryActivity"
             android:exported="false"/>
+        <activity android:name=".ProductBuyActivity"
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

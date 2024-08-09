@@ -62,6 +62,7 @@ class ProductActivity : ComponentActivity() {
         executorService.execute {
             var intent = intent
             var category: String? = intent.getStringExtra(IntentKey.CATEGORY_KEY)
+            viewBinding.pCategory.text = category
 
             //based on category get the stuff
 
@@ -91,11 +92,10 @@ class ProductActivity : ComponentActivity() {
                                 )
                             )
                         }.addOnFailureListener { task ->
-                            Log.d("[CATEGORY]", "${task.stackTrace}")
+                            Log.d("[PRODUCT]", "${task.stackTrace}")
                         }.addOnCompleteListener {
-                            Log.d("[CATEGORY]", "Categorylist: $productList")
                             runOnUiThread {
-                                Log.d("[Category]", "UI updated.")
+                                Log.d("[PRODUCT]", "UI updated, Productlist => ${productList}")
                                 this.productAdapter = ProductAdapter(productList, myActivityResultLauncher, this@ProductActivity)
                                 this.recyclerView.adapter = productAdapter
                             }
@@ -138,11 +138,11 @@ class ProductActivity : ComponentActivity() {
                                     )
                                 )
                             }.addOnFailureListener { task ->
-                                Log.d("[CATEGORY]", "${task.stackTrace}")
+                                Log.d("[PRODUCT]", "${task.stackTrace}")
                             }.addOnCompleteListener {
-                                Log.d("[CATEGORY]", "Categorylist: $productList")
+                                Log.d("[PRODUCT]", "Categorylist: $productList")
                                 runOnUiThread {
-                                    Log.d("[Category]", "UI updated.")
+                                    Log.d("[PRODUCT]", "UI updated.")
                                     this.productAdapter = ProductAdapter(productList, myActivityResultLauncher, this@ProductActivity)
                                     this.recyclerView.adapter = productAdapter
                                 }

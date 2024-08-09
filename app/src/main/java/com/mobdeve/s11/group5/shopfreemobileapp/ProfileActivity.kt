@@ -62,7 +62,7 @@ class ProfileActivity : ComponentActivity () {
 
                         var productlist: ArrayList<Product> = ArrayList<Product>()
 
-                        transactionlist.add(
+                            /*transactionlist.add(
                             Transaction(
                                 null,
                                 document.data["tdate"].toString(),
@@ -72,7 +72,7 @@ class ProfileActivity : ComponentActivity () {
                                 productlist, //placeholder
                                 document.data["tcompleted"].toString().toBoolean()
                             )
-                        )
+                        )*/
                     }
                 }
             }
