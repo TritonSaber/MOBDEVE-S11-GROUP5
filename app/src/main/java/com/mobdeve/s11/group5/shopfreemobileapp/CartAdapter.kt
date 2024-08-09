@@ -2,14 +2,29 @@ package com.mobdeve.s11.group5.shopfreemobileapp
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.storage
 import com.mobdeve.s11.group5.shopfreemobileapp.databinding.CartItemBinding
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
-class CartAdapter (cart: ArrayList<Product>, nextActivityResultLauncher: ActivityResultLauncher<Intent>): RecyclerView.Adapter<CartViewHolder>() {
-    private val cart: ArrayList<Product> = cart
+class CartAdapter (cart: ArrayList<CartItem>, nextActivityResultLauncher: ActivityResultLauncher<Intent>): RecyclerView.Adapter<CartViewHolder>() {
+    private val cart: ArrayList<CartItem> = cart
+    private lateinit var products: ArrayList<Product>
+    private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
+    private lateinit var dbRef: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
+    private var collectionexist: Boolean? = null
+    private val storage = Firebase.storage
 
 
     private val nextActivityResultLauncher: ActivityResultLauncher<Intent> = nextActivityResultLauncher
@@ -28,6 +43,40 @@ class CartAdapter (cart: ArrayList<Product>, nextActivityResultLauncher: Activit
         val itemBinding = CartItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val cartViewHolder = CartViewHolder(itemBinding)
 
+        //get the actual cart
+        dbRef = Firebase.firestore
+        var storageRef = storage.reference
+        var currentuser = auth.currentUser?.uid
+
+        executorService.execute {
+            for (item in cart) {
+                item.productUID?.let {
+                    dbRef.collection(MyFirestoreReferences.PRODUCT_COLLECTION).document(it).get().addOnSuccessListener { document ->
+                        //get the image
+                        var imageref = storageRef.child(document.data!!["pstorageURL"].toString())
+
+                        imageref.downloadUrl.addOnSuccessListener { image ->
+                            products.add(
+                                Product(
+                                    document.data!!["pname"].toString(),
+                                    document.data!!["plocId"].toString(),
+                                    document.data!!["pprice"].toString().toDouble(),
+                                    document.data!!["pstorageURL"].toString(),
+                                    image,
+                                    item.quantity,
+                                    document.data!!["pdesc"].toString(),
+                                    document.data!!["pcategory"].toString(),
+                                    document.data!!["pperWeight"].toString()
+                                )
+                            )
+                        }
+                    }.addOnFailureListener { task ->
+                        Log.d("[CART-Adapter]", "Failed: ${task.stackTrace}")
+                    }
+                }
+            }
+        }
+
         //delete logic
         //val db = Firebase.firestore
 
@@ -35,7 +84,21 @@ class CartAdapter (cart: ArrayList<Product>, nextActivityResultLauncher: Activit
         itemBinding.ciClose.setOnClickListener {view ->
             //remove it in the online database first
 
-            //remove the item at the position
+            dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).whereEqualTo("userid", currentuser).whereEqualTo("tcompleted", false).get().addOnSuccessListener { document ->
+                if (document.documents.size > 1) {
+                    //database error wahoo
+                } else {
+                    //remove the specific item from the cart
+                    var docref = document.documents[0].id
+                    dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).document(docref).update(
+                        hashMapOf<String, Any>(
+                            "cart.$docref" to FieldValue.delete()
+                        )
+                    )
+                }
+            }
+
+            //remove the item at the position in the UI
             (view.context as Activity).runOnUiThread {
                 cart.removeAt(cartViewHolder.bindingAdapterPosition)
                 notifyItemRemoved(cartViewHolder.bindingAdapterPosition)
@@ -72,6 +135,6 @@ class CartAdapter (cart: ArrayList<Product>, nextActivityResultLauncher: Activit
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        holder.bindData(this.cart[position])
+        holder.bindData(this.products[position])
     }
 }

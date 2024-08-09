@@ -11,6 +11,7 @@ class ProductViewHolder(private val itemBinding: ProductItemBinding): RecyclerVi
     private var piName: TextView = itemBinding.piName
     private var piDesc: TextView = itemBinding.piDesc
 
+
     fun bindData(p : Product) {
         piName.text = p.pName
         //this'll be Price in this case

@@ -30,7 +30,9 @@ class ProductBuyActivity: ComponentActivity() {
     private lateinit var mySpinner: Spinner
     private lateinit var spinnerAdapter: ArrayAdapter<String>
     private lateinit var price: String
-    private lateinit var selectedProduct: Product
+    private lateinit var selectedProduct: CartItem
+    private lateinit var loclist: ArrayList<ProductBuy>
+    private lateinit var pricelist: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +42,13 @@ class ProductBuyActivity: ComponentActivity() {
         setContentView(productbuyBinding.root)
 
         this.mySpinner = productbuyBinding.pbLocChoice
-
         var intent = intent
 
         dbRef = Firebase.firestore
         var storageRef = storage.reference
 
         mySpinner.setOnItemClickListener { parent, view, position, id ->
-            var price = mySpinner.getItemAtPosition(position).toString()
+            var locationid = loclist
         }
 
         productbuyBinding.pbCard.setOnClickListener {
@@ -65,14 +66,16 @@ class ProductBuyActivity: ComponentActivity() {
                         .whereEqualTo("userid", user)
                         .whereEqualTo("tcompleted", false)
                         .get().addOnSuccessListener { documents ->
-                            if (documents.size() > 1) {
+                            if (documents.documents.size > 1) {
                                 Log.d("[TRANSACTION]", "ERROR USER HAS TWO ACTIVE CARTS")
                             } else {
                                 var docref = documents.documents[0].id
 
+                                //find the specific item and pass the ID instead, less stuff to pass
+
                                 dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION)
                                     .document(docref)
-                                    .update("cart", FieldValue.arrayUnion(selectedProduct))
+                                    .update("cart.$docref", FieldValue.arrayUnion(selectedProduct))
                             }
                     }
                 }
@@ -85,8 +88,8 @@ class ProductBuyActivity: ComponentActivity() {
                 .get().addOnSuccessListener { documents ->
                     var imageref = documents.documents[0].data?.get("pstorageURL")?.toString()
                         ?.let { storageRef.child(it) }
-                    var loclist = ArrayList<ProductBuy>()
-                    var pricelist = ArrayList<String>()
+                    loclist = ArrayList()
+                    pricelist = ArrayList()
                     var downloadedimage: Uri? = null
 
                     for (document in documents) {

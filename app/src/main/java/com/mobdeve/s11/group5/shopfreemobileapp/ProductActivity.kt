@@ -62,6 +62,7 @@ class ProductActivity : ComponentActivity() {
         executorService.execute {
             var intent = intent
             var category: String? = intent.getStringExtra(IntentKey.CATEGORY_KEY)
+
             //based on category get the stuff
 
             executorService.execute {

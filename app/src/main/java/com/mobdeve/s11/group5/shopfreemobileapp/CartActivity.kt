@@ -2,6 +2,7 @@ package com.mobdeve.s11.group5.shopfreemobileapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
@@ -14,11 +15,14 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
+import com.mobdeve.s11.group5.shopfreemobileapp.databinding.CartBinding
+import java.util.Calendar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class CartActivity() : ComponentActivity() {
     //this is where the cart.xml will be used
+    private lateinit var cartBinding: CartBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var cartAdapter: CartAdapter
     private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
@@ -26,7 +30,7 @@ class CartActivity() : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
     private var collectionexist: Boolean? = null
     private val storage = Firebase.storage
-    private lateinit var cart: ArrayList<Product>
+    private lateinit var cart: ArrayList<CartItem>
 
     //for the payment activity
     private val myActivityResultLauncher = registerForActivityResult<Intent, ActivityResult>(
@@ -53,13 +57,15 @@ class CartActivity() : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.cart)
+
 
         //sample data
-        cart = ArrayList<Product>()
+        cart = ArrayList<CartItem>()
+        this.cartBinding = CartBinding.inflate(layoutInflater)
+        setContentView(cartBinding.root)
 
 
-        this.recyclerView = findViewById(R.id.cRecycler)
+        this.recyclerView = cartBinding.cRecycler
         this.recyclerView.setLayoutManager(LinearLayoutManager(this@CartActivity))
 
         executorService.execute {
@@ -67,6 +73,8 @@ class CartActivity() : ComponentActivity() {
             //val sample = Product()
             //cart.add(sample)
             //Log.d("[CART]", "${cart}")
+
+            cart = ArrayList()
 
             //get the cart from the db
             dbRef = Firebase.firestore
@@ -78,7 +86,18 @@ class CartActivity() : ComponentActivity() {
 
                 }.addOnFailureListener {
                     //make the user transaction
-
+                    var usercart = Transaction(
+                        userrn,
+                        Calendar.getInstance().time.toString(),
+                        0.00,
+                        cart,
+                        false
+                    )
+                    dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).document().set(usercart).addOnSuccessListener {
+                        Log.d("[TRANSACTION]", "User cart generated")
+                    }.addOnFailureListener { task ->
+                        Log.d("[TRANSACTION]", "Failed to create: ${task.stackTrace} ")
+                    }
                 }
             }
 
