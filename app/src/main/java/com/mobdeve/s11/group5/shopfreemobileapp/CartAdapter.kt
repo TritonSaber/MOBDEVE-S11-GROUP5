@@ -1,6 +1,7 @@
 package com.mobdeve.s11.group5.shopfreemobileapp
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,14 +19,15 @@ import com.mobdeve.s11.group5.shopfreemobileapp.databinding.CartItemBinding
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class CartAdapter (cart: ArrayList<CartItem>, nextActivityResultLauncher: ActivityResultLauncher<Intent>): RecyclerView.Adapter<CartViewHolder>() {
-    private val cart: ArrayList<CartItem> = cart
-    private lateinit var products: ArrayList<Product>
+class CartAdapter (productlist: ArrayList<Product>, nextActivityResultLauncher: ActivityResultLauncher<Intent>, activitycontext: Context): RecyclerView.Adapter<CartViewHolder>() {
+    private val activitycontext: Context = activitycontext
+    private val products: ArrayList<Product> = productlist
     private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
     private lateinit var dbRef: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
     private var collectionexist: Boolean? = null
     private val storage = Firebase.storage
+
 
 
     private val nextActivityResultLauncher: ActivityResultLauncher<Intent> = nextActivityResultLauncher
@@ -37,48 +39,18 @@ class CartAdapter (cart: ArrayList<CartItem>, nextActivityResultLauncher: Activi
      */
 
     override fun getItemCount(): Int {
-        return this.cart.size
+        return this.products.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
         val itemBinding = CartItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val cartViewHolder = CartViewHolder(itemBinding)
-
+        Log.d("[TRANSACTION]", "Adapter productlist: $products")
         //get the actual cart
         dbRef = Firebase.firestore
         auth = Firebase.auth
-        products = ArrayList()
         var storageRef = storage.reference
         var currentuser = auth.currentUser?.uid
-
-        executorService.execute {
-            for (item in cart) {
-                item.productUID?.let {
-                    dbRef.collection(MyFirestoreReferences.PRODUCT_COLLECTION).document(it).get().addOnSuccessListener { document ->
-                        //get the image
-                        var imageref = storageRef.child(document.data!!["pstorageURL"].toString())
-
-                        imageref.downloadUrl.addOnSuccessListener { image ->
-                            products.add(
-                                Product(
-                                    document.data!!["pname"].toString(),
-                                    document.data!!["plocId"].toString(),
-                                    document.data!!["pprice"].toString().toDouble(),
-                                    document.data!!["pstorageURL"].toString(),
-                                    image,
-                                    item.quantity,
-                                    document.data!!["pdesc"].toString(),
-                                    document.data!!["pcategory"].toString(),
-                                    document.data!!["pperWeight"].toString()
-                                )
-                            )
-                        }
-                    }.addOnFailureListener { task ->
-                        Log.d("[CART-Adapter]", "Failed: ${task.stackTrace}")
-                    }
-                }
-            }
-        }
 
         //delete logic
         //val db = Firebase.firestore
@@ -103,7 +75,7 @@ class CartAdapter (cart: ArrayList<CartItem>, nextActivityResultLauncher: Activi
 
             //remove the item at the position in the UI
             (view.context as Activity).runOnUiThread {
-                cart.removeAt(cartViewHolder.bindingAdapterPosition)
+                products.removeAt(cartViewHolder.bindingAdapterPosition)
                 notifyItemRemoved(cartViewHolder.bindingAdapterPosition)
             }
         }
@@ -138,10 +110,7 @@ class CartAdapter (cart: ArrayList<CartItem>, nextActivityResultLauncher: Activi
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        if (products.isEmpty()) {
-            Log.d("[TRANSACTION]", "User does not have anything in their cart yet")
-        } else {
+        Log.d("[TRANSACTION]", "Products: $products")
             holder.bindData(this.products[position])
-        }
     }
 }

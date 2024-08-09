@@ -31,6 +31,7 @@ class CartActivity() : ComponentActivity() {
     private var collectionexist: Boolean? = null
     private val storage = Firebase.storage
     private lateinit var cart: ArrayList<CartItem>
+    private lateinit var productlist: ArrayList<Product>
 
     //for the payment activity
     private val myActivityResultLauncher = registerForActivityResult<Intent, ActivityResult>(
@@ -64,6 +65,8 @@ class CartActivity() : ComponentActivity() {
         this.cartBinding = CartBinding.inflate(layoutInflater)
         setContentView(cartBinding.root)
 
+        var storageRef = storage.reference
+
 
         this.recyclerView = cartBinding.cRecycler
         this.recyclerView.setLayoutManager(LinearLayoutManager(this@CartActivity))
@@ -75,7 +78,7 @@ class CartActivity() : ComponentActivity() {
             //Log.d("[CART]", "${cart}")
 
             cart = ArrayList<CartItem>()
-            cart.add(CartItem(null,null))
+            productlist = ArrayList()
 
             //get the cart from the db
             dbRef = Firebase.firestore
@@ -83,8 +86,65 @@ class CartActivity() : ComponentActivity() {
             executorService.execute {
                 auth = Firebase.auth
                 var userrn = auth.currentUser?.uid
-                dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).whereEqualTo("userid", userrn).whereEqualTo("tcompleted", false).get().addOnSuccessListener { task ->
-                    Log.d("[TRANSACTION]", "Success: ${task}")
+                dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).whereEqualTo("tuserid", userrn).whereEqualTo("tcompleted", false).get().addOnSuccessListener { document ->
+                    Log.d("[TRANSACTION]", "Success: ${document.documents.first().id} => ${document.documents.first().data}")
+
+                    var transaction = document.documents.first().id
+                    var breakdownlist = document.documents.first().data!!["cart"]
+
+                    Log.d("[TRANSACTION]", "Cart Internals: $breakdownlist")
+
+                    for (item in breakdownlist as ArrayList<*>) {
+                        var convitem = item as Map<*, *>
+                        Log.d("[TRANSACTION]", "value pairs: ${convitem}")
+
+                        dbRef.collection(MyFirestoreReferences.PRODUCT_COLLECTION).document(convitem["productUID"].toString()).get().addOnSuccessListener { document ->
+                            //get the image
+                            Log.d("[TRANSACTION]", "Document: ${document.data!!["pname"]}")
+                            var imageref = storageRef.child(document.data!!["pstorageURL"].toString())
+
+                            imageref.downloadUrl.addOnSuccessListener { image ->
+                                productlist.add(
+                                    Product(
+                                        document.data!!["pname"].toString(),
+                                        document.data!!["plocId"].toString(),
+                                        document.data!!["pprice"].toString().toDouble(),
+                                        document.data!!["pstorageURL"].toString(),
+                                        image,
+                                        convitem["quantity"].toString().toInt(),
+                                        document.data!!["pdesc"].toString(),
+                                        document.data!!["pcategory"].toString(),
+                                        document.data!!["pperWeight"].toString()
+                                    )
+                                )
+                            }.addOnCompleteListener {
+                                runOnUiThread {
+                                    Log.d("[TRANSACTION]", "Productlist before adapter: $productlist")
+                                    //cartAdapter code + myActivityResultLauncher
+                                    this.cartAdapter = CartAdapter(productlist, myActivityResultLauncher, this@CartActivity)
+                                    this.recyclerView.setAdapter(cartAdapter)
+                                }
+                            }
+                        }.addOnFailureListener { task ->
+                            Log.d("[CART-Adapter]", "Failed: ${task.stackTrace}")
+                        }
+                    }
+                    /*dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION)
+                        .document(transaction)
+                        .collection("cart")
+                        .get().addOnSuccessListener { documents ->
+                        for (doc in documents) {
+                            Log.d("[TRANSACTION]", "Cart contents: ${doc.id} => ${doc.data}")
+                        }
+                    }.addOnFailureListener { task ->
+                        Log.d("[TRANSACTION]", "Failed Cart get: ${task.stackTrace}")
+                    }.addOnCompleteListener {
+                        runOnUiThread {
+                            //cartAdapter code + myActivityResultLauncher
+                            this.cartAdapter = CartAdapter(cart, myActivityResultLauncher)
+                            this.recyclerView.setAdapter(cartAdapter)
+                        }
+                    }*/
                 }.addOnFailureListener {
                     //make the user transaction
                     var usercart = Transaction(
@@ -99,12 +159,6 @@ class CartActivity() : ComponentActivity() {
                     }.addOnFailureListener { task ->
                         Log.d("[TRANSACTION]", "Failed to create: ${task.stackTrace} ")
                     }
-                }.addOnCompleteListener {
-                    runOnUiThread {
-                        //cartAdapter code + myActivityResultLauncher
-                        this.cartAdapter = CartAdapter(cart, myActivityResultLauncher)
-                        this.recyclerView.setAdapter(cartAdapter)
-                    }
                 }
             }
 
@@ -114,3 +168,4 @@ class CartActivity() : ComponentActivity() {
 
     }
 }
+

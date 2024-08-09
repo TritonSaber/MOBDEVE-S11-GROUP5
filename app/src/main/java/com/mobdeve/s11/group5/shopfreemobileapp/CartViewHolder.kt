@@ -40,8 +40,14 @@ class CartViewHolder (private val itemBinding: CartItemBinding): RecyclerView.Vi
         ciName.text = p.pName
         Picasso.get().load(p.pImageUri).into(this.ciImage)
         ciDesc.text = p.pDesc
+        if (p.pDesc == "null") {
+            ciDesc.text = null
+        } else {
+            ciDesc.text = p.pDesc
+        }
         //this will probably be 0
         ciTotal.text = ((p.pQuantity!!.toInt() * p.pPrice).toString())
+        ciQuantity.setText(ciQuantity.text.toString(), TextView.BufferType.EDITABLE)
     }
 
 
