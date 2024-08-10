@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Shopfree Mobile App</string>
+
+    <string-array name="PaymentOption">
+        <item>Select Card</item>
+        <item>Credit Card</item>
+        <item>GCash</item>
+    </string-array>
 </resources>

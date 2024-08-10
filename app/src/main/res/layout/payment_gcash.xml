@@ -6,6 +6,22 @@
     android:layout_height="match_parent">
 
     <Button
+        android:id="@+id/btnPay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/round_btn"
+        android:backgroundTint="#4CAF50"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout14"
+        app:layout_constraintVertical_bias="0.985" />
+
+    <Button
         android:id="@+id/psBack"
         android:layout_width="42dp"
         android:layout_height="wrap_content"
@@ -27,6 +43,7 @@
         app:layout_constraintStart_toStartOf="parent"></LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -36,7 +53,9 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/psBack"
+        app:layout_constraintVertical_bias="1.0">
 
         <TextView
             android:id="@+id/psTitle"
@@ -49,7 +68,7 @@
             android:id="@+id/psPayments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:spinnerMode="dropdown"
-            />
+            android:spinnerMode="dropdown" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

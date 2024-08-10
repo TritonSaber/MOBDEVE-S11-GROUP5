@@ -39,6 +39,10 @@ class CategoryActivity: ComponentActivity() {
 
         val storageRef = storage.reference
 
+        marketBinding.mBack.setOnClickListener{
+            finish()
+        }
+
         executorService.execute {
             dbRef = Firebase.firestore
             //get the data needed

@@ -66,7 +66,6 @@ class CartActivity() : ComponentActivity() {
         setContentView(cartBinding.root)
 
         var storageRef = storage.reference
-        var totalprice: Double = 0.00
 
 
         this.recyclerView = cartBinding.cRecycler
@@ -84,6 +83,7 @@ class CartActivity() : ComponentActivity() {
 
             //get the cart from the db
             dbRef = Firebase.firestore
+            var totalprice: Double = 0.00
 
             executorService.execute {
                 auth = Firebase.auth
@@ -112,41 +112,56 @@ class CartActivity() : ComponentActivity() {
                         Log.d("[TRANSACTION]", "Cart Internals: $breakdownlist")
 
                         for (item in breakdownlist as ArrayList<*>) {
+
                             var convitem = item as Map<*, *>
+
                             Log.d("[TRANSACTION]", "value pairs: ${convitem}")
+                            if (convitem["productUID"].toString() == "null") {
+                                //do nothing
+                            }
+                            else{
 
-                            dbRef.collection(MyFirestoreReferences.PRODUCT_COLLECTION).document(convitem["productUID"].toString()).get().addOnSuccessListener { document ->
-                                //get the image
-                                Log.d("[TRANSACTION]", "Document: ${document.data!!["pname"]}")
-                                var imageref = storageRef.child(document.data!!["pstorageURL"].toString())
-
-                                totalprice += document.data!!["pprice"].toString().toDouble() * convitem["quantity"].toString().toInt()
-                                imageref.downloadUrl.addOnSuccessListener { image ->
-                                    productlist.add(
-                                        Product(
-                                            document.data!!["pname"].toString(),
-                                            document.data!!["plocId"].toString(),
-                                            document.data!!["pprice"].toString().toDouble(),
-                                            document.data!!["pstorageURL"].toString(),
-                                            image,
-                                            convitem["quantity"].toString().toInt(),
-                                            document.data!!["pdesc"].toString(),
-                                            document.data!!["pcategory"].toString(),
-                                            document.data!!["pperWeight"].toString()
+                            dbRef.collection(MyFirestoreReferences.PRODUCT_COLLECTION)
+                                .document(convitem["productUID"].toString()).get()
+                                .addOnSuccessListener { document ->
+                                    //get the image
+                                    Log.d("[TRANSACTION]", "Document: ${document.data!!["pname"]}")
+                                    var imageref =
+                                        storageRef.child(document.data!!["pstorageURL"].toString())
+                                    totalprice += document.data!!["pprice"].toString().toDouble() * convitem["quantity"].toString().toInt()
+                                    imageref.downloadUrl.addOnSuccessListener { image ->
+                                        productlist.add(
+                                            Product(
+                                                document.data!!["pname"].toString(),
+                                                document.data!!["plocId"].toString(),
+                                                document.data!!["pprice"].toString().toDouble(),
+                                                document.data!!["pstorageURL"].toString(),
+                                                image,
+                                                convitem["quantity"].toString().toInt(),
+                                                document.data!!["pdesc"].toString(),
+                                                document.data!!["pcategory"].toString(),
+                                                document.data!!["pperWeight"].toString()
+                                            )
                                         )
-                                    )
-                                }.addOnCompleteListener {
-                                    runOnUiThread {
-                                        Log.d("[TRANSACTION]", "Productlist before adapter: $productlist")
-                                        //cartAdapter code + myActivityResultLauncher
-                                        this.cartBinding.cTotal.text = totalprice.toString()
-                                        this.cartAdapter = CartAdapter(productlist, myActivityResultLauncher, this@CartActivity)
-                                        this.recyclerView.setAdapter(cartAdapter)
+                                    }.addOnCompleteListener {
+                                        runOnUiThread {
+                                            Log.d(
+                                                "[TRANSACTION]",
+                                                "Productlist before adapter: $productlist"
+                                            )
+                                            //cartAdapter code + myActivityResultLauncher
+                                            this.cartAdapter = CartAdapter(
+                                                productlist,
+                                                myActivityResultLauncher,
+                                                this@CartActivity
+                                            )
+                                            this.recyclerView.setAdapter(cartAdapter)
+                                        }
                                     }
-                                }
-                            }.addOnFailureListener { task ->
+                                }.addOnFailureListener { task ->
                                 Log.d("[CART-Adapter]", "Failed: ${task.stackTrace}")
                             }
+                        }
                         }
                     }
                 }.addOnFailureListener {
@@ -169,7 +184,13 @@ class CartActivity() : ComponentActivity() {
 
         }
 
+        cartBinding.cPayment.setOnClickListener{
+            executorService.execute {
+                val intent = Intent(this@CartActivity, PaymentActivity::class.java)
 
+                startActivity(intent)
+            }
+        }
     }
 }
 

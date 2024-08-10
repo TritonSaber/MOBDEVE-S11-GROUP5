@@ -34,6 +34,14 @@
             android:exported="false"/>
         <activity android:name=".ProductBuyActivity"
             android:exported="false"/>
+        <activity android:name=".PaymentActivity"
+            android:exported="false"/>
+        <activity android:name=".PaymentCreditActivity"
+            android:exported="false"/>
+        <activity android:name=".PaymentGCashActivity"
+            android:exported="false"/>
+        <activity android:name=".PaymentCompleteActivity"
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

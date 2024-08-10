@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
             }
 
             homepageBinding.ibTrackOrder.setOnClickListener {
-
+                moveToTrackOrderActivity()
             }
 
             homepageBinding.ibProfilePicture.setOnClickListener {
@@ -129,7 +129,7 @@ class MainActivity : ComponentActivity() {
         }
 
         homepageBinding.ibTrackOrder.setOnClickListener {
-
+            moveToTrackOrderActivity()
         }
 
         homepageBinding.ibProfilePicture.setOnClickListener {
@@ -197,8 +197,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun moveToTrackOrderActivity(){
-//        val i = Intent(this@MainActivity, TrackOrderActivity::class.java)
-//
-//        startActivity(i)
+        val i = Intent(this@MainActivity, TrackOrderActivity::class.java)
+
+        startActivity(i)
     }
 }
