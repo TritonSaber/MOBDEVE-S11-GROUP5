@@ -88,49 +88,89 @@ class CartActivity() : ComponentActivity() {
                 auth = Firebase.auth
                 var userrn = auth.currentUser?.uid
                 dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).whereEqualTo("tuserid", userrn).whereEqualTo("tcompleted", false).get().addOnSuccessListener { document ->
-                    Log.d("[TRANSACTION]", "Success: ${document.documents.first().id} => ${document.documents.first().data}")
-
-                    var transaction = document.documents.first().id
-                    var breakdownlist = document.documents.first().data!!["cart"]
-
-                    Log.d("[TRANSACTION]", "Cart Internals: $breakdownlist")
-
-                    for (item in breakdownlist as ArrayList<*>) {
-                        var convitem = item as Map<*, *>
-                        Log.d("[TRANSACTION]", "value pairs: ${convitem}")
-
-                        dbRef.collection(MyFirestoreReferences.PRODUCT_COLLECTION).document(convitem["productUID"].toString()).get().addOnSuccessListener { document ->
-                            //get the image
-                            Log.d("[TRANSACTION]", "Document: ${document.data!!["pname"]}")
-                            var imageref = storageRef.child(document.data!!["pstorageURL"].toString())
-
-                            imageref.downloadUrl.addOnSuccessListener { image ->
-                                productlist.add(
-                                    Product(
-                                        document.data!!["pname"].toString(),
-                                        document.data!!["plocId"].toString(),
-                                        document.data!!["pprice"].toString().toDouble(),
-                                        document.data!!["pstorageURL"].toString(),
-                                        image,
-                                        convitem["quantity"].toString().toInt(),
-                                        document.data!!["pdesc"].toString(),
-                                        document.data!!["pcategory"].toString(),
-                                        document.data!!["pperWeight"].toString()
-                                    )
-                                )
-                            }.addOnCompleteListener {
-                                runOnUiThread {
-                                    Log.d("[TRANSACTION]", "Productlist before adapter: $productlist")
-                                    //cartAdapter code + myActivityResultLauncher
-                                    this.cartAdapter = CartAdapter(productlist, myActivityResultLauncher, this@CartActivity)
-                                    this.recyclerView.setAdapter(cartAdapter)
-                                }
-                            }
+                    if (document.isEmpty) {
+                        //make the user transaction
+                        var usercart = Transaction(
+                            userrn,
+                            Calendar.getInstance().time.toString(),
+                            0.00,
+                            cart,
+                            false
+                        )
+                        dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).document().set(usercart).addOnSuccessListener {
+                            Log.d("[TRANSACTION]", "User cart generated")
                         }.addOnFailureListener { task ->
-                            Log.d("[CART-Adapter]", "Failed: ${task.stackTrace}")
+                            Log.d("[TRANSACTION]", "Failed to create: ${task.stackTrace} ")
+                        }
+                    } else {
+                        Log.d("[TRANSACTION]", "Success: ${document.documents.first().id} => ${document.documents.first().data}")
+
+                        var transaction = document.documents.first().id
+                        var breakdownlist = document.documents.first().data!!["cart"]
+
+                        Log.d("[TRANSACTION]", "Cart Internals: $breakdownlist")
+
+                        for (item in breakdownlist as ArrayList<*>) {
+                            var convitem = item as Map<*, *>
+                            Log.d("[TRANSACTION]", "value pairs: ${convitem}")
+
+                            dbRef.collection(MyFirestoreReferences.PRODUCT_COLLECTION).document(convitem["productUID"].toString()).get().addOnSuccessListener { document ->
+                                //get the image
+                                Log.d("[TRANSACTION]", "Document: ${document.data!!["pname"]}")
+                                var imageref = storageRef.child(document.data!!["pstorageURL"].toString())
+
+                                imageref.downloadUrl.addOnSuccessListener { image ->
+                                    productlist.add(
+                                        Product(
+                                            document.data!!["pname"].toString(),
+                                            document.data!!["plocId"].toString(),
+                                            document.data!!["pprice"].toString().toDouble(),
+                                            document.data!!["pstorageURL"].toString(),
+                                            image,
+                                            convitem["quantity"].toString().toInt(),
+                                            document.data!!["pdesc"].toString(),
+                                            document.data!!["pcategory"].toString(),
+                                            document.data!!["pperWeight"].toString()
+                                        )
+                                    )
+                                }.addOnCompleteListener {
+                                    runOnUiThread {
+                                        Log.d("[TRANSACTION]", "Productlist before adapter: $productlist")
+                                        //cartAdapter code + myActivityResultLauncher
+                                        this.cartAdapter = CartAdapter(productlist, myActivityResultLauncher, this@CartActivity)
+                                        this.recyclerView.setAdapter(cartAdapter)
+                                    }
+                                }
+                            }.addOnFailureListener { task ->
+                                Log.d("[CART-Adapter]", "Failed: ${task.stackTrace}")
+                            }
                         }
                     }
-                    /*dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION)
+                }.addOnFailureListener {
+                    //make the user transaction
+                    var usercart = Transaction(
+                        userrn,
+                        Calendar.getInstance().time.toString(),
+                        0.00,
+                        cart,
+                        false
+                    )
+                    dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).document().set(usercart).addOnSuccessListener {
+                        Log.d("[TRANSACTION]", "User cart generated")
+                    }.addOnFailureListener { task ->
+                        Log.d("[TRANSACTION]", "Failed to create: ${task.stackTrace} ")
+                    }
+                }
+            }
+
+
+        }
+
+
+    }
+}
+
+/*dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION)
                         .document(transaction)
                         .collection("cart")
                         .get().addOnSuccessListener { Log.d("[TRANSACTION]", "Success: ${document.documents.first().id} => ${document.documents.first().data}")
@@ -183,27 +223,3 @@ class CartActivity() : ComponentActivity() {
                             this.recyclerView.setAdapter(cartAdapter)
                         }
                     }*/
-                }.addOnFailureListener {
-                    //make the user transaction
-                    var usercart = Transaction(
-                        userrn,
-                        Calendar.getInstance().time.toString(),
-                        0.00,
-                        cart,
-                        false
-                    )
-                    dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).document().set(usercart).addOnSuccessListener {
-                        Log.d("[TRANSACTION]", "User cart generated")
-                    }.addOnFailureListener { task ->
-                        Log.d("[TRANSACTION]", "Failed to create: ${task.stackTrace} ")
-                    }
-                }
-            }
-
-
-        }
-
-
-    }
-}
-
