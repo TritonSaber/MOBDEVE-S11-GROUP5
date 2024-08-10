@@ -117,7 +117,7 @@ class ProductBuyActivity: ComponentActivity() {
                                     selectedProduct = CartItem(productid, productbuyBinding.itemQuanEt.text.toString().toInt())
                                     dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION)
                                         .document(docref)
-                                        .update("cart.$productid", FieldValue.arrayUnion(selectedProduct))
+                                        .update("cart", FieldValue.arrayUnion(selectedProduct))
 
                                         runOnUiThread {
                                             finish()
