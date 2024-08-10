@@ -116,49 +116,69 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        homepageBinding.ibViewFood.setOnClickListener{
-            moveToViewFoodActivity()
-        }
+        PACKAGE_NAME = applicationContext.packageName
 
-        homepageBinding.ibMarkets.setOnClickListener{
-            moveToMarketActivity()
-        }
+        this.titleBinding = TitlePageBinding.inflate(layoutInflater)
+        this.homepageBinding = HomepageBinding.inflate(layoutInflater)
 
-        homepageBinding.ibTransaction.setOnClickListener{
+        Log.d("[MAIN]", "Current View: $currentView ")
+        if(currentView.equals("title")){
+            Log.d("[MAIN]", "Buttons binded")
+            setContentView(titleBinding.root)
+            titleBinding.hpLoginbtn.setOnClickListener {
+                moveToLoginActivity()
+            }
 
+            titleBinding.hpSignupbtn.setOnClickListener{
+                moveToRegisterActivity()
+            }
         }
+        else if(currentView.equals("home")){
+            setContentView(homepageBinding.root)
+            homepageBinding.ibViewFood.setOnClickListener{
+                moveToViewFoodActivity()
+            }
 
-        homepageBinding.ibTrackOrder.setOnClickListener {
-            moveToTrackOrderActivity()
-        }
+            homepageBinding.ibMarkets.setOnClickListener{
+                moveToMarketActivity()
+            }
 
-        homepageBinding.ibProfilePicture.setOnClickListener {
-            Log.d("[MAIN]", "Profile Clicked")
-            val intent = Intent(
-                this@MainActivity,
-                ProfileActivity::class.java
-            )
-            startActivity(intent)
-        }
-        homepageBinding.hpHome.setOnClickListener {
-            //do nothing
-            Toast.makeText(this, "You're already at the home page!", Toast.LENGTH_SHORT).show()
-        }
-        homepageBinding.hpProfile.setOnClickListener {
-            Log.d("[MAIN]", "Profile Clicked")
-            val intent = Intent(
-                this@MainActivity,
-                ProfileActivity::class.java
-            )
-            startActivity(intent)
-        }
-        homepageBinding.hpCart.setOnClickListener {
-            Log.d("[MAIN]", "Cart Clicked")
-            val intent = Intent(
-                this@MainActivity,
-                CartActivity::class.java
-            )
-            startActivity(intent)
+            homepageBinding.ibTransaction.setOnClickListener{
+
+            }
+
+            homepageBinding.ibTrackOrder.setOnClickListener {
+                moveToTrackOrderActivity()
+            }
+
+            homepageBinding.ibProfilePicture.setOnClickListener {
+                Log.d("[MAIN]", "Profile Clicked")
+                val intent = Intent(
+                    this@MainActivity,
+                    ProfileActivity::class.java
+                )
+                startActivity(intent)
+            }
+            homepageBinding.hpHome.setOnClickListener {
+                //do nothing
+                Toast.makeText(this, "You're already at the home page!", Toast.LENGTH_SHORT).show()
+            }
+            homepageBinding.hpProfile.setOnClickListener {
+                Log.d("[MAIN]", "Profile Clicked")
+                val intent = Intent(
+                    this@MainActivity,
+                    ProfileActivity::class.java
+                )
+                startActivity(intent)
+            }
+            homepageBinding.hpCart.setOnClickListener {
+                Log.d("[MAIN]", "Cart Clicked")
+                val intent = Intent(
+                    this@MainActivity,
+                    CartActivity::class.java
+                )
+                startActivity(intent)
+            }
         }
     }
 
