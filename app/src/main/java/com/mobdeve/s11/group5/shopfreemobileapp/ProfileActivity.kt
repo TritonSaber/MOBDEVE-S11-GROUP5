@@ -61,26 +61,23 @@ class ProfileActivity : ComponentActivity () {
                     .whereEqualTo("tuserid", userid)
                     .whereEqualTo("tcompleted", true).get().addOnSuccessListener { documentSnapshots ->
                     for ( document in documentSnapshots) {
-                        var productlist: ArrayList<Product> = ArrayList<Product>()
-
-                            /*transactionlist.add(
+                        transactionlist.add(
                             Transaction(
-                                null,
+                                document.id, //make this the cart's id
                                 document.data["tdate"].toString(),
-                                null,
-                                document.data["tlocname"].toString(),
                                 document.data["ttotal"].toString().toDouble(),
-                                productlist, //placeholder
+                                null, //placeholder//no need to pass in this context
                                 document.data["tcompleted"].toString().toBoolean()
                             )
-                        )*/
+                        )
+                        runOnUiThread {
+                            this.transactionAdapter = TransactionAdapter(transactionlist)
+                            this.recyclerView.adapter = transactionAdapter
+                        }
                     }
                 }
             }
-            runOnUiThread {
-                this.transactionAdapter = TransactionAdapter(transactionlist)
-                this.recyclerView.adapter = transactionAdapter
-            }
+
         }
 
         viewBinding.ppEdit.setOnClickListener {

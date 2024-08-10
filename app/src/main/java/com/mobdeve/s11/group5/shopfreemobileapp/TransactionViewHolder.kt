@@ -16,7 +16,6 @@ class TransactionViewHolder (private val itemBinding: TransactionHistoryItemBind
     fun bindData (t: Transaction) {
         thiDateAndTime.text = t.tDate.toString()
         //thiLocation.text = t.tLocName
-        thiTotalItems.text = t.cart.size.toString()
         thiTotal.text = t.tTotal.toString()
     }
 
