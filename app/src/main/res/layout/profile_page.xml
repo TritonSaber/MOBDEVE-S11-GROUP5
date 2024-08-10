@@ -56,10 +56,10 @@
 
         <ImageView
             android:id="@+id/ppPfp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="191dp"
+            android:layout_height="131dp"
             android:layout_gravity="center_horizontal"
-            tools:src="@tools:sample/avatars" />
+            android:background="@drawable/default_ava" />
 
         <TextView
             android:id="@+id/ppUsername"

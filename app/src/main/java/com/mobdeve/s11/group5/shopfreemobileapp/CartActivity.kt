@@ -66,6 +66,7 @@ class CartActivity() : ComponentActivity() {
         setContentView(cartBinding.root)
 
         var storageRef = storage.reference
+        var totalprice: Double = 0.00
 
 
         this.recyclerView = cartBinding.cRecycler
@@ -119,6 +120,7 @@ class CartActivity() : ComponentActivity() {
                                 Log.d("[TRANSACTION]", "Document: ${document.data!!["pname"]}")
                                 var imageref = storageRef.child(document.data!!["pstorageURL"].toString())
 
+                                totalprice += document.data!!["pprice"].toString().toDouble() * convitem["quantity"].toString().toInt()
                                 imageref.downloadUrl.addOnSuccessListener { image ->
                                     productlist.add(
                                         Product(
@@ -137,6 +139,7 @@ class CartActivity() : ComponentActivity() {
                                     runOnUiThread {
                                         Log.d("[TRANSACTION]", "Productlist before adapter: $productlist")
                                         //cartAdapter code + myActivityResultLauncher
+                                        this.cartBinding.cTotal.text = totalprice.toString()
                                         this.cartAdapter = CartAdapter(productlist, myActivityResultLauncher, this@CartActivity)
                                         this.recyclerView.setAdapter(cartAdapter)
                                     }
