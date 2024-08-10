@@ -4,6 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/cpassBack"
+        android:layout_width="42dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/baseline_keyboard_backspace_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/linearLayout10"
         android:layout_width="match_parent"
@@ -64,11 +72,12 @@
 
         <ImageButton
             android:id="@+id/cPayment"
-            android:layout_width="wrap_content"
-            android:layout_height="64dp"
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/paymenticon" />
+            android:adjustViewBounds="true"
+            android:background="@drawable/paymenticon"
+            android:scaleType="centerCrop" />
 
     </LinearLayout>
 

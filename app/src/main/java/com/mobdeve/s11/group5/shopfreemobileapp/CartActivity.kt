@@ -71,6 +71,9 @@ class CartActivity() : ComponentActivity() {
         this.recyclerView = cartBinding.cRecycler
         this.recyclerView.setLayoutManager(LinearLayoutManager(this@CartActivity))
 
+        this.cartBinding.cpassBack.setOnClickListener {
+            finish()
+        }
         executorService.execute {
             //get the cart from firestore or firebase cache
             //val sample = Product()
@@ -150,6 +153,7 @@ class CartActivity() : ComponentActivity() {
                                                 "Productlist before adapter: $productlist"
                                             )
                                             //cartAdapter code + myActivityResultLauncher
+                                            this.cartBinding.cTotal.text = totalprice.toString()
                                             this.cartAdapter = CartAdapter(
                                                 productlist,
                                                 myActivityResultLauncher,

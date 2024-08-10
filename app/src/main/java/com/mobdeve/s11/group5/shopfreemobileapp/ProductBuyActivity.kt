@@ -54,6 +54,10 @@ class ProductBuyActivity: ComponentActivity() {
 
         productbuyBinding.pbName.text = productname
 
+        productbuyBinding.cpassBack.setOnClickListener {
+            finish()
+        }
+
         mySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 // Get the selected item
@@ -113,7 +117,7 @@ class ProductBuyActivity: ComponentActivity() {
                                     selectedProduct = CartItem(productid, productbuyBinding.itemQuanEt.text.toString().toInt())
                                     dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION)
                                         .document(docref)
-                                        .update("cart", FieldValue.arrayUnion(selectedProduct))
+                                        .update("cart.$productid", FieldValue.arrayUnion(selectedProduct))
 
                                         runOnUiThread {
                                             finish()
