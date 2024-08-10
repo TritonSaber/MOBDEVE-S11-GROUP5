@@ -153,7 +153,7 @@ class CartActivity() : ComponentActivity() {
                                                 "Productlist before adapter: $productlist"
                                             )
                                             //cartAdapter code + myActivityResultLauncher
-                                            this.cartBinding.cTotal.text = totalprice.toString()
+                                            this.cartBinding.cTotal.text = "₱$totalprice"
                                             this.cartAdapter = CartAdapter(
                                                 productlist,
                                                 myActivityResultLauncher,
