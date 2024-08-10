@@ -6,4 +6,6 @@ object IntentKey {
     const val CATEGORY_KEY = "CATEGORY"
 
     const val PRODUCT_KEY = "PRODUCT"
+
+    const val TOTAL_KEY = "TOTAL"
 }

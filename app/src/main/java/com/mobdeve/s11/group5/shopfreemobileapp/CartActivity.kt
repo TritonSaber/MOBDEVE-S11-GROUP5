@@ -70,6 +70,7 @@ class CartActivity() : ComponentActivity() {
 
         this.recyclerView = cartBinding.cRecycler
         this.recyclerView.setLayoutManager(LinearLayoutManager(this@CartActivity))
+        val intent = Intent(this@CartActivity, PaymentActivity::class.java)
 
         this.cartBinding.cpassBack.setOnClickListener {
             finish()
@@ -154,6 +155,14 @@ class CartActivity() : ComponentActivity() {
                                             )
                                             //cartAdapter code + myActivityResultLauncher
                                             this.cartBinding.cTotal.text = "₱$totalprice"
+                                            cartBinding.cPayment.setOnClickListener{
+                                                executorService.execute {
+                                                    intent.putExtra(IntentKey.TOTAL_KEY, totalprice)
+
+                                                    startActivity(intent)
+                                                }
+                                            }
+
                                             this.cartAdapter = CartAdapter(
                                                 productlist,
                                                 myActivityResultLauncher,
@@ -186,14 +195,6 @@ class CartActivity() : ComponentActivity() {
             }
 
 
-        }
-
-        cartBinding.cPayment.setOnClickListener{
-            executorService.execute {
-                val intent = Intent(this@CartActivity, PaymentActivity::class.java)
-
-                startActivity(intent)
-            }
         }
     }
 }

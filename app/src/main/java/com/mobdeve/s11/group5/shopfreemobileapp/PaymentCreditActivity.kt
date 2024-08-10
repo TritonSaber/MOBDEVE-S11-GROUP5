@@ -21,6 +21,9 @@ class PaymentCreditActivity : ComponentActivity() {
         this.paymentCreditCardBinding = PaymentCreditcardBinding.inflate(layoutInflater)
         setContentView(paymentCreditCardBinding.root)
 
+        var receivedIntent = intent
+        var totalPrice = receivedIntent.getDoubleExtra(IntentKey.TOTAL_KEY, 0.00)
+
         val spinner : Spinner = paymentCreditCardBinding.psPayments
         ArrayAdapter.createFromResource(
             this,
@@ -38,6 +41,7 @@ class PaymentCreditActivity : ComponentActivity() {
                         2 -> Intent(this@PaymentCreditActivity, PaymentGCashActivity::class.java)
                         else -> return
                     }
+                    intent.putExtra(IntentKey.TOTAL_KEY, totalPrice)
                     startActivity(intent)
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -56,7 +60,7 @@ class PaymentCreditActivity : ComponentActivity() {
         this.paymentCreditCardBinding.btnPay.setOnClickListener {
             executorService.execute{
                 val intent = Intent(this@PaymentCreditActivity, PaymentCompleteActivity::class.java)
-
+                intent.putExtra(IntentKey.TOTAL_KEY, totalPrice)
                 startActivity(intent)
                 finish()
             }

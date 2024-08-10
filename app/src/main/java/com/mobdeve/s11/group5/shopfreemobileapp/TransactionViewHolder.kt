@@ -17,6 +17,7 @@ class TransactionViewHolder (private val itemBinding: TransactionHistoryItemBind
         thiDateAndTime.text = t.tDate.toString()
         //thiLocation.text = t.tLocName
         thiTotal.text = t.tTotal.toString()
+        thiTotal.text = t.tTotal.toString()
     }
 
 }

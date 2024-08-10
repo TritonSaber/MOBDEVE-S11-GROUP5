@@ -33,7 +33,11 @@ class TransactionAdapter (transactionlist: ArrayList<Transaction>): RecyclerView
     }
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
-        holder.bindData(this.transactionlist[position])
+        if (transactionlist.isEmpty()) {
+            //do nothing
+        } else {
+            holder.bindData(this.transactionlist[position])
+        }
     }
 
 }

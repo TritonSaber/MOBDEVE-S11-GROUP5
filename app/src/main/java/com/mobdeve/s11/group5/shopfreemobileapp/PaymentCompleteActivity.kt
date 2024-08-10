@@ -31,6 +31,9 @@ class PaymentCompleteActivity : ComponentActivity() {
         dbRef = Firebase.firestore
         auth = Firebase.auth
 
+        var receivedIntent = intent
+        var totalPrice = receivedIntent.getDoubleExtra(IntentKey.TOTAL_KEY, 0.00)
+
         this.paymentCompleteBinding = PaymentCompleteBinding.inflate(layoutInflater)
         setContentView(paymentCompleteBinding.root)
 
@@ -47,6 +50,9 @@ class PaymentCompleteActivity : ComponentActivity() {
                         .document(docref)
                         .update("tcompleted", true)
                         .addOnCompleteListener{
+                            dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION)
+                                .document(docref)
+                                .update("ttotal", totalPrice)
                             var usercart = Transaction(
                                 auth.currentUser?.uid,
                                 Calendar.getInstance().time.toString(),

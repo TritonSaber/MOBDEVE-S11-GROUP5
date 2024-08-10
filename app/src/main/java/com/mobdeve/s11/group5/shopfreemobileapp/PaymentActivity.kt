@@ -18,6 +18,9 @@ class PaymentActivity: ComponentActivity() {
         setContentView(paymentSelectBinding.root)
 
         val spinner : Spinner = paymentSelectBinding.psPayments
+        var receivedIntent = intent
+        var totalPrice: Double = receivedIntent.getDoubleExtra(IntentKey.TOTAL_KEY, 0.00)
+
         ArrayAdapter.createFromResource(
             this,
             R.array.PaymentOption,
@@ -36,6 +39,8 @@ class PaymentActivity: ComponentActivity() {
                         2 -> Intent(this@PaymentActivity, PaymentGCashActivity::class.java)
                         else -> return
                     }
+
+                    intent.putExtra(IntentKey.TOTAL_KEY, totalPrice)
 
                     startActivity(intent)
 
