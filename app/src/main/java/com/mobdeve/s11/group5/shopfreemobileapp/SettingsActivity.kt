@@ -52,6 +52,10 @@ class SettingsActivity : ComponentActivity () {
             executorService.execute {
                 auth.signOut()
 
+                val intent = Intent(this@SettingsActivity, MainActivity::class.java)
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+                startActivity(intent)
                 //go back to the login page
             }
         }

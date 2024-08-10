@@ -57,9 +57,10 @@ class ProfileActivity : ComponentActivity () {
                         }
                     }
 
-                dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION).whereEqualTo("tuserid", userid).get().addOnSuccessListener { documentSnapshots ->
+                dbRef.collection(MyFirestoreReferences.TRANSACTION_COLLECTION)
+                    .whereEqualTo("tuserid", userid)
+                    .whereEqualTo("tcompleted", true).get().addOnSuccessListener { documentSnapshots ->
                     for ( document in documentSnapshots) {
-
                         var productlist: ArrayList<Product> = ArrayList<Product>()
 
                             /*transactionlist.add(
