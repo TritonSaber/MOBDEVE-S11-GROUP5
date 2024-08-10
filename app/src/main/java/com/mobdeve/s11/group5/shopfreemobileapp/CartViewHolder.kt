@@ -47,7 +47,7 @@ class CartViewHolder (private val itemBinding: CartItemBinding): RecyclerView.Vi
         }
         //this will probably be 0
         ciTotal.text = ((p.pQuantity!!.toInt() * p.pPrice).toString())
-        ciQuantity.setText(ciQuantity.text.toString(), TextView.BufferType.EDITABLE)
+        ciQuantity.setText(p.pQuantity!!.toInt().toString(), TextView.BufferType.EDITABLE)
     }
 
 
